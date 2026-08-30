@@ -6,13 +6,13 @@ Nadeem:{id:"BRCLT-91274051",password:"NAD129",balance:9000000,limit:700000,pendi
 Gani:{id:"BRCLT-34781926",password:"GAN129",balance:2400000,limit:40000,pending:3855},
 Dhanush:{id:"BRCLT-62845017",password:"DHA129",balance:6800000,limit:400000,pending:3855},
 Vinayak:{id:"BRCLT-73456218",password:"VIN129",balance:9500000,limit:500000,pending:5000},
-Shabana:{id:"BRCLT-SHABANA",password:"SHA129",balance:200,limit:100,pending:300},
-Devraj:{id:"BRCLT-DEVRAJ",password:"DEV129",balance:200,limit:100,pending:300},
-Bharth:{id:"BRCLT-BHARTH",password:"BHA129",balance:200,limit:100,pending:300},
-Yashvantha:{id:"BRCLT-YASHVANTHA",password:"YAS129",balance:200,limit:100,pending:300},
-Adarsh:{id:"BRCLT-ADARSH",password:"ADA129",balance:200,limit:100,pending:300},
-Prashanth:{id:"BRCLT-PRASHANTH",password:"PRA129",balance:200,limit:100,pending:300},
-Tanveer:{id:"BRCLT-TANVEER",password:"TAN129",balance:200,limit:100,pending:300}
+Shabana:{id:"BRCLT-SHABANA",password:"SHA129",balance:550,000limit:100,pending:300},
+Devraj:{id:"BRCLT-DEVRAJ",password:"DEV129",balance:15000000,limit:100,pending:300},
+Bharth:{id:"BRCLT-BHARTH",password:"BHA129",balance:5500000,limit:100,pending:300},
+Yashvantha:{id:"BRCLT-YASHVANTHA",password:"YAS129",balance:200900,limit:100,pending:300},
+Adarsh:{id:"BRCLT-ADARSH",password:"ADA129",balance:150000,limit:100,pending:300},
+Prashanth:{id:"BRCLT-PRASHANTH",password:"PRA129",balance:6000000,limit:100,pending:300},
+Tanveer:{id:"BRCLT-TANVEER",password:"TAN129",balance:200000,limit:100,pending:2500}
 };let current="Zain";let orderCount=12;
 function money(n){return "₹"+n.toLocaleString("en-IN")}
 function login(){let n=document.getElementById("username").value.trim();let cid=document.getElementById("clientId").value.trim();let p=document.getElementById("password").value;if(!clients[n]||clients[n].id!==cid||clients[n].password!==p){toast("Check the fictional username, client ID and password");return}current=n;const c=clients[n];document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");document.getElementById("sideName").textContent=n;document.getElementById("sideId").textContent=c.id;document.getElementById("avatar").textContent=n[0];document.getElementById("balance").textContent=money(c.balance);document.getElementById("limit").textContent=money(c.limit);document.getElementById("pendingBalance").textContent=money(c.pending);renderCharts();renderActivity();renderClientWithdrawalUpdates()}
@@ -38,7 +38,7 @@ document.addEventListener("input",e=>{if(e.target.id==="qty"||e.target.id==="lim
 function setIntervalLabel(btn){document.querySelectorAll(".intervals button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");toast(`Chart interval changed to ${btn.textContent}`)}
 function filterInstruments(){const q=document.getElementById("stockSearch").value.toLowerCase();document.querySelectorAll("#tickerStrip>div").forEach(x=>x.style.display=x.innerText.toLowerCase().includes(q)?"grid":"none")}
 function paperOrder(){const inst=document.getElementById("instrument").value;const q=Number(document.getElementById("qty").value)||1;const side=tradeSide;const ref="SIM-"+Math.floor(Math.random()*900000+100000);orderCount++;document.getElementById("ordersCount").textContent=orderCount;document.getElementById("ordersBadge").textContent=orderCount+" orders";const tr=document.getElementById("orderHistory").insertRow(0);tr.innerHTML=`<td>${new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</td><td class="${side==="BUY"?"success":"rejected"}">${side}</td><td>${inst}</td><td>${q}</td><td><span class="status approved">Filled</span></td>`;toast(`${side} ${q} × ${inst} recorded · ${ref}`)}
-function withdraw(){const a=Number(document.getElementById("withdrawAmount").value);if(!a||a<=0){toast("Enter a valid simulated amount");return}const tr=document.getElementById("withdrawTable").insertRow(0);tr.innerHTML=`<td>30 Aug 2026</td><td>${money(a)}</td><td>SIM-WD-${Math.floor(Math.random()*9000+1000)}</td><td><span class="status pending">Pending</span></td>`;toast("Simulated withdrawal request added")}
+function withdraw(){const a=Number(document.getElementById("withdrawAmount").value);if(!a||a<=0){toast("Enter a valid simulated amount");return}const tr=document.getElementById("withdrawTable").insertRow(0);tr.innerHTML=`<td>30 Aug 2026</td><td>${money(a)}</td><td>SIM-WD-${Math.floor(Math.random()*9000+1000)}</td><td><span class="status pending">Pending</span></td>`;toast(" withdrawal request added")}
 function paperOrder(side){const inst=document.getElementById("instrument").value;const q=Number(document.getElementById("qty").value)||1;orderCount++;document.getElementById("ordersCount").textContent=orderCount;toast(`${side} ${q} × ${inst} recorded as paper order`)}
 function mockUpload(kind){
   if(kind==="Bank proof"){const s=document.getElementById("bankProofStatus");if(s)s.textContent="Submitted (mock)";}
@@ -54,7 +54,7 @@ function submitClientDetails(){
   toast("Client details saved in simulation only");
 }
 function postComment(){let v=document.getElementById("comment").value.trim();if(!v)return;let d=document.createElement("div");d.className="message";d.innerHTML=`<b>Client note</b><p>${v.replace(/[<>&]/g,m=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[m]))}</p><small>Just now · Simulation</small>`;document.getElementById("comments").prepend(d);document.getElementById("comment").value=""}
-function downloadCSV(type){const rows=type==="account"?"Date,Type,Reference,Amount,Status\\n2026-08-30,Payment,SIM-2508-001,2500,Pending\\n2026-08-21,Withdrawal,SIM-WD-8841,75000,Approved":"Date,Instrument,Side,Quantity,Price\\n2026-08-30,MSN Energy,BUY,10,1284.20\\n2026-08-28,Demo Bank,SELL,20,842.60";const blob=new Blob([rows],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`msn-brock-${type}-simulation.csv`;a.click()}
+function downloadCSV(type){const rows=type==="account"?"Date,Type,Reference,Amount,Status\\n2026-08-30,Payment,SIM-2508-001,2500,Pending\\n2026-08-21,Withdrawal,SIM-WD-8841,75000,Approved":"Date,Instrument,Side,Quantity,Price\\n2026-08-30,MSN Energy,BUY,10,1284.20\\n2026-08-28, Bank,SELL,20,842.60";const blob=new Blob([rows],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`msn-brock-${type}-simulation.csv`;a.click()}
 function toast(t){let x=document.createElement("div");x.textContent=t;x.style="position:fixed;right:20px;bottom:20px;z-index:50;background:#20283a;color:#fff;padding:14px 18px;border:1px solid #344058;border-radius:12px;box-shadow:0 15px 40px #0008";document.body.appendChild(x);setTimeout(()=>x.remove(),2500)}
 
 function renderClientWithdrawalUpdates(){
