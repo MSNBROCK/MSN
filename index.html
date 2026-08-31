@@ -8,16 +8,16 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<div class="notice">SIMULATION / PAPER-TRADING ENVIRONMENT — balances, transactions, withdrawals and KYC shown here are fictional and cannot move real money or verify real identity documents.</div>
+<div class="notice">SIMULATION / PAPER-TRADING  — balances, transactions, withdrawals and KYC shown here are fictional and move real money or verify real identity documents.</div>
 <div id="login" class="login-screen">
   <div class="login-card">
     <div class="logo">MSN <span>BROCK</span></div>
     <p class="muted">Client investment portal</p>
-    <input id="username" placeholder="Username" value="Shreyas">
-    <input id="clientId" placeholder="Client ID" value="BRCLT-45871293">
-    <input id="password" type="password" placeholder="Password" value="SHR129">
+    <input id="username" placeholder="Username" value="XXXX">
+    <input id="clientId" placeholder="Client ID" value="BRCLT-XXXX">
+    <input id="password" type="password" placeholder="Password" value="XXXXXX">
     <button onclick="login()">Sign in</button>
-    <small>Use one of the fictional client records configured for this prototype. All 14 fictional simulation clients are available in the client selector.</small>
+    <small>Use one of the fictional client records configured for this prototype.</small>
   </div>
 </div>
 
@@ -39,10 +39,10 @@
 </aside>
 
 <main class="main">
-<header><div><span class="eyebrow">CLIENT PORTAL</span><h1 id="pageTitle">Overview</h1></div><div class="top-actions"><span class="pill">● Simulation</span><button class="icon">⌕</button><button class="icon">◔</button></div></header>
+<header><div><span class="eyebrow">CLIENT PORTAL</span><h1 id="pageTitle">Overview</h1></div><div class="top-actions"><span class="pill">●</span><button class="icon">⌕</button><button class="icon">◔</button></div></header>
 
 <section id="overview" class="page">
-<div class="hero"><div><span class="eyebrow">TOTAL PORTFOLIO</span><div class="big" id="balance">₹95,00,000</div><div class="gain">+₹3,42,800 <span>+3.74% simulated</span></div></div><div class="hero-meta"><span>Available withdrawal</span><b id="limit">₹5,00,000</b><span>Next payment</span><b>₹2,500 · Pending</b></div></div>
+<div class="hero"><div><span class="eyebrow">TOTAL PORTFOLIO</span><div class="big" id="balance">₹95,00,000</div><div class="gain">+₹3,42,800 <span>+3.74% </span></div></div><div class="hero-meta"><span>Available withdrawal</span><b id="limit">₹5,00,000</b><span>Next payment</span><b>₹2,500 · Pending</b></div></div>
 <div class="cards">
  <div class="card"><span>Pending payments</span><b id="pendingBalance">₹3,855</b><small class="warning">Awaiting review</small></div>
  <div class="card"><span>Invested value</span><b>₹91,57,200</b><small>96.4% of portfolio</small></div>
@@ -54,12 +54,12 @@
 
 <section id="payments" class="page hidden"><div class="section-grid"><div class="panel"><h2>Payment request</h2><div class="form-row"><label>Amount<input value="2500" disabled></label><label>Status<select><option>Pending</option><option>Approved</option><option>Rejected</option></select></label></div><label>UTR / reference number<input placeholder="SIM-REF-2500"></label><button onclick="toast('Payment recorded in simulation history')">Add simulated payment</button></div><div class="panel"><h2>Payment history</h2><table><thead><tr><th>Date</th><th>Amount</th><th>Reference</th><th>Status</th></tr></thead><tbody><tr><td>30 Aug 2026</td><td>₹2,500</td><td>SIM-2508-001</td><td><span class="status pending">Pending</span></td></tr><tr><td>12 Aug 2026</td><td>₹10,000</td><td>SIM-1208-882</td><td><span class="status approved">Approved</span></td></tr></tbody></table></div></div></section>
 
-<section id="withdrawals" class="page hidden"><div class="section-grid"><div class="panel"><h2>Request simulated withdrawal</h2><p class="muted">This form records a fictional request only. No bank transfer is performed.</p><label>Amount<input id="withdrawAmount" type="number" placeholder="50000"></label><button onclick="withdraw()">Submit request</button></div><div class="panel"><h2>Withdrawal history</h2><table><thead><tr><th>Date</th><th>Amount</th><th>Reference</th><th>Status</th></tr></thead><tbody id="withdrawTable"><tr><td>21 Aug 2026</td><td>₹75,000</td><td>SIM-WD-8841</td><td><span class="status approved">Approved</span></td></tr><tr><td>05 Aug 2026</td><td>₹25,000</td><td>SIM-WD-7210</td><td><span class="status rejected">Rejected</span></td></tr></tbody></table></div></div></section>
+<section id="withdrawals" class="page hidden"><div class="section-grid"><div class="panel"><h2>Request withdrawal</h2><p class="muted">  bank transfer.</p><label>Amount<input id="withdrawAmount" type="number" placeholder="50000"></label><button onclick="withdraw()">Submit request</button></div><div class="panel"><h2>Withdrawal history</h2><table><thead><tr><th>Date</th><th>Amount</th><th>Reference</th><th>Status</th></tr></thead><tbody id="withdrawTable"><tr><td>29 Aug 2026</td><td>₹35000</td><td>SIM-WD-8841</td><td><span class="status approved">Approved</span></td></tr><tr><td>05 Aug 2026</td><td>₹25,000</td><td>SIM-WD-7210</td><td><span class="status rejected">Rejected</span></td></tr></tbody></table></div></div></section>
 
-<section id="statements" class="page hidden"><div class="cards"><div class="card"><span>Account statement</span><b>Aug 2026</b><button onclick="downloadCSV('account')">Download CSV</button></div><div class="card"><span>Portfolio statement</span><b>30 Aug 2026</b><button onclick="downloadCSV('portfolio')">Download CSV</button></div></div><div class="panel"><h2>Transaction history</h2><table><thead><tr><th>Date</th><th>Type</th><th>Instrument</th><th>Amount</th><th>Status</th></tr></thead><tbody><tr><td>30 Aug</td><td>Buy</td><td>MSN Energy (paper)</td><td>₹1,20,000</td><td>Filled</td></tr><tr><td>28 Aug</td><td>Sell</td><td>Demo Bank (paper)</td><td>₹80,000</td><td>Filled</td></tr><tr><td>21 Aug</td><td>Withdrawal</td><td>Simulated cash</td><td>₹75,000</td><td>Approved</td></tr></tbody></table></div>
+<section id="statements" class="page hidden"><div class="cards"><div class="card"><span>Account statement</span><b>Aug 2026</b><button onclick="downloadCSV('account')">Download CSV</button></div><div class="card"><span>Portfolio statement</span><b>30 Aug 2026</b><button onclick="downloadCSV('portfolio')">Download CSV</button></div></div><div class="panel"><h2>Transaction history</h2><table><thead><tr><th>Date</th><th>Type</th><th>Instrument</th><th>Amount</th><th>Status</th></tr></thead><tbody><tr><td>30 Aug</td><td>Buy</td><td>MSN Energy (paper)</td><td>₹1,20,000</td><td>Filled</td></tr><tr><td>28 Aug</td><td>Sell</td><td> Bank (paper)</td><td>₹80,000</td><td>Filled</td></tr><tr><td>21 Aug</td><td>Withdrawal</td><td>Simulated cash</td><td>₹75,000</td><td>Approved</td></tr></tbody></table></div>
 <div id="clientWithdrawalUpdates" class="panel">
   <div class="panel-head"><b>Client Withdrawal Updates</b><span class="pill">Simulation ledger</span></div>
-  <p class="muted">Separate simulated withdrawal-history view for each client.</p>
+  <p class="muted">Separate withdrawal-history view for each client.</p>
   <div class="client-update-grid" id="clientUpdateGrid"></div>
 </div>
 
@@ -72,18 +72,18 @@
 </div>
 
 <div class="ticker-strip" id="tickerStrip">
-  <div><b>MSN Energy</b><span>₹1,284.20</span><em>+2.14%</em></div>
-  <div><b>Demo Bank</b><span>₹842.60</span><em>+0.81%</em></div>
-  <div><b>Atlas Motors</b><span>₹516.35</span><em>-0.42%</em></div>
-  <div><b>Nova IT</b><span>₹2,108.75</span><em>+1.32%</em></div>
+  <div><b>IDFC</b><span>₹1,284.20</span><em>+2.14%</em></div>
+  <div><b>SBI</b><span>₹842.60</span><em>+0.81%</em></div>
+  <div><b>HDFC</b><span>₹516.35</span><em>-0.42%</em></div>
+  <div><b>NIFTY</b><span>₹2,108.75</span><em>+1.32%</em></div>
 </div>
 
 <div class="terminal-grid">
   <div class="panel chart-panel">
     <div class="panel-head">
       <div>
-        <span class="eyebrow">MARKET SIMULATOR</span>
-        <h2 id="instrumentTitle">MSN Energy</h2>
+        <span class="eyebrow">MARKET</span>
+        <h2 id="instrumentTitle">HDFC</h2>
       </div>
       <div class="chart-price"><b id="livePrice">₹1,284.20</b><span id="liveChange">+2.14%</span></div>
     </div>
@@ -103,10 +103,10 @@
     </div>
     <label>Instrument
       <select id="instrument" onchange="selectInstrument(this.value)">
-        <option>MSN Energy</option>
-        <option>Demo Bank</option>
-        <option>Atlas Motors</option>
-        <option>Nova IT</option>
+        <option>IDFC</option>
+        <option>SBI</option>
+        <option>HDFC</option>
+        <option>NIFTY</option>
       </select>
     </label>
     <div class="form-row">
@@ -118,17 +118,17 @@
       <span>Estimated value</span><b id="estimatedValue">₹12,842.00</b>
     </div>
     <button id="tradeButton" class="primary-trade" onclick="paperOrder()">Place BUY order</button>
-    <small class="muted">Paper order only. No real broker, bank, or exchange transaction occurs.</small>
+    <small class="muted">Paper order only.real broker, bank, or exchange transaction occurs.</small>
   </div>
 </div>
 
 <div class="grid2">
   <div class="panel">
-    <div class="panel-head"><b>Open positions</b><span class="muted">Simulated</span></div>
+    <div class="panel-head"><b>Open positions</b><span class="muted"></span></div>
     <table><thead><tr><th>Instrument</th><th>Qty</th><th>Avg. Price</th><th>P&amp;L</th></tr></thead>
       <tbody id="positions">
-        <tr><td>MSN Energy</td><td>120</td><td>₹1,248.40</td><td class="success">+₹4,296</td></tr>
-        <tr><td>Nova IT</td><td>35</td><td>₹2,071.10</td><td class="success">+₹1,318</td></tr>
+        <tr><td>IDFC</td><td>120</td><td>₹1,248.40</td><td class="success">+₹4,296</td></tr>
+        <tr><td>NIFTY</td><td>35</td><td>₹2,071.10</td><td class="success">+₹1,318</td></tr>
       </tbody>
     </table>
   </div>
@@ -147,8 +147,8 @@
 <section id="kyc" class="page hidden">
 <div class="kyc-banner">
   <div><span class="eyebrow">CLIENT VERIFICATION</span><h2>Client details &amp; KYC</h2>
-  <p class="muted">Simulation interface only. Do not enter real Aadhaar, PAN, bank, or other sensitive identity information.</p></div>
-  <div class="kyc-status"><b>Mock verification</b><span>Not connected to a KYC provider</span></div>
+  <p class="muted">enter real Aadhaar, PAN, bank, or other sensitive identity information.</p></div>
+  <div class="kyc-status"><b>Mock verification</b><span>connected to a KYC provider</span></div>
 </div>
 
 <div class="section-grid">
@@ -169,7 +169,7 @@
 
   <div class="panel">
     <h2>Identity document</h2>
-    <p class="muted">Aadhaar and PAN fields are simulated. Use dummy values only.</p>
+    <p class="muted">Aadhaar and PAN fields .</p>
     <label>Aadhaar number (mock)<input id="mockAadhaar" maxlength="14" placeholder="XXXX XXXX XXXX"></label>
     <label>PAN number (mock)<input id="mockPan" maxlength="10" placeholder="ABCDE1234F"></label>
     <div class="doc-row"><span>Aadhaar document</span><button onclick="mockUpload('Aadhaar')">Choose file</button></div>
@@ -193,9 +193,9 @@
 
   <div class="panel">
     <h2>Bank proof</h2>
-    <p class="muted">Used only for the simulation record. No bank account is connected.</p>
+    <p class="muted">Used only for the simulation record. bank account is connected.</p>
     <div class="form-row">
-      <label>Bank name<input id="mockBankName" placeholder="Demo Bank"></label>
+      <label>Bank name<input id="mockBankName" placeholder=" Bank"></label>
       <label>Account ending<input id="mockBankLast4" maxlength="4" placeholder="1234"></label>
     </div>
     <label>IFSC (mock)<input id="mockIfsc" placeholder="DEMO0000000"></label>
@@ -211,16 +211,16 @@
   <p class="muted">All entries below are fictional and do not represent actual bank transfers.</p>
   <table><thead><tr><th>Date</th><th>Amount</th><th>Reference</th><th>Destination</th><th>Status</th></tr></thead>
   <tbody id="kycWithdrawalTable">
-    <tr><td>30 Aug 2026</td><td>₹50,000</td><td>SIM-WD-5512</td><td>Demo Bank ••••1234</td><td><span class="status pending">Pending</span></td></tr>
-    <tr><td>21 Aug 2026</td><td>₹75,000</td><td>SIM-WD-8841</td><td>Demo Bank ••••1234</td><td><span class="status approved">Approved</span></td></tr>
-    <tr><td>05 Aug 2026</td><td>₹25,000</td><td>SIM-WD-7210</td><td>Demo Bank ••••1234</td><td><span class="status rejected">Rejected</span></td></tr>
+    <tr><td>29 Aug 2026</td><td>₹35,000</td><td>SIM-WD-5512</td><td> XX••••5833</td><td><span class="status pending">Pending</span></td></tr>
+    <tr><td>21 JUN 2026</td><td>₹75,000</td><td>SIM-WD-8841</td><td>XX••••1234</td><td><span class="status approved">Approved</span></td></tr>
+    <tr><td>05 AUG 2026</td><td>₹25,000</td><td>SIM-WD-7210</td><td>XX••••1234</td><td><span class="status rejected">Rejected</span></td></tr>
   </tbody></table>
 </div>
 </section>
 
-<section id="news" class="page hidden"><div class="panel"><h2>Market News</h2><p class="muted">Prepared for connection to a legitimate market-news API. Items below are clearly labeled simulated examples.</p><div class="news"><article><span>SIMULATED · 10:30</span><h3>Markets open higher in fictional session</h3><p>Placeholder headline for UI testing. Not live financial information.</p></article><article><span>SIMULATED · 09:45</span><h3>Technology sector shows mock strength</h3><p>Placeholder headline for UI testing.</p></article></div></div></section>
+<section id="news" class="page hidden"><div class="panel"><h2>Market News</h2><p class="muted">Prepared for connection to a legitimate market-news AP.</p><div class="news"><article><span>SIMULATED · 10:30</span><h3>Markets open higher in fictional session</h3><p>Placeholder headline for UI testing. Not live financial information.</p></article><article><span>SIMULATED · 09:45</span><h3>Technology sector shows mock strength</h3><p>Placeholder headline for UI testing.</p></article></div></div></section>
 
-<section id="messages" class="page hidden"><div class="grid2"><div class="panel"><h2>Client notifications</h2><div class="message"><b>Welcome to MSN Brock</b><p>Your simulation account is ready.</p><small>Today · 09:15</small></div><div class="message"><b>Payment status updated</b><p>₹2,500 remains pending in the fictional ledger.</p><small>Today · 08:40</small></div></div><div class="panel"><h2>Comments</h2><textarea id="comment" placeholder="Write a note..."></textarea><button onclick="postComment()">Post comment</button><div id="comments"></div></div></div></section>
+<section id="messages" class="page hidden"><div class="grid2"><div class="panel"><h2>Client notifications</h2><div class="message"><b>Welcome to MSN Brock</b><p>Your  account is ready.</p><small>Today · 09:15</small></div><div class="message"><b>Payment status updated</b><p>₹2,500 remains pending in the fictional ledger.</p><small>Today · 08:40</small></div></div><div class="panel"><h2>Comments</h2><textarea id="comment" placeholder="Write a note..."></textarea><button onclick="postComment()">Post comment</button><div id="comments"></div></div></div></section>
 </main></div>
 <script src="app.js"></script>
 </body>
