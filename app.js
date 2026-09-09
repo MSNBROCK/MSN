@@ -11,7 +11,7 @@ Devraj:{id:"BRCLT-DEVRAJ",password:"DEV129",balance:5600000,limit:100000,pending
 Bharth:{id:"BRCLT-BHARTH",password:"BHA129",balance:460000,limit:1000000,pending:3000},
 Yashvantha:{id:"BRCLT-YASHVANTHA",password:"YAS129",balance:6000000,limit:100,pending:3000},
 Adarsh:{id:"BRCLT-ADARSH",password:"ADA129",balance:200,limit:93000000,pending:3000},
-sadik:{id:"BRCLT-sadik",password:"SAD129",balance:2500,limit:0,pending:1000},
+sadik:{id:"BRCLT-ADIK",password:"SAD129",balance:2500,limit:0,pending:1000},
 Tanveer:{id:"BRCLT-TANVEER",password:"TAN129",balance:1500,limit:100,pending:1500}
 };let current="Zain";let orderCount=12;
 function money(n){return "₹"+n.toLocaleString("en-IN")}
