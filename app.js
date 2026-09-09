@@ -12,7 +12,7 @@ Bharth:{id:"BRCLT-BHARTH",password:"BHA129",balance:460000,limit:1000000,pending
 Yashvantha:{id:"BRCLT-YASHVANTHA",password:"YAS129",balance:6000000,limit:100,pending:3000},
 Adarsh:{id:"BRCLT-ADARSH",password:"ADA129",balance:200,limit:93000000,pending:3000},
 sadik:{id:"BRCLT-ADIK",password:"SAD129",balance:2500,limit:0,pending:1000},
-Tanveer:{id:"BRCLT-TANVEER",password:"TAN129",balance:1500,limit:100,pending:1500}
+Tanveer:{id:"BRCLT-TANVEER",password:"TAN129",balance:550000,limit:100,pending:1500}
 };let current="Zain";let orderCount=12;
 function money(n){return "₹"+n.toLocaleString("en-IN")}
 function login(){let n=document.getElementById("username").value.trim();let cid=document.getElementById("clientId").value.trim();let p=document.getElementById("password").value;if(!clients[n]||clients[n].id!==cid||clients[n].password!==p){toast("Check the fictional username, client ID and password");return}current=n;const c=clients[n];document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");document.getElementById("sideName").textContent=n;document.getElementById("sideId").textContent=c.id;document.getElementById("avatar").textContent=n[0];document.getElementById("balance").textContent=money(c.balance);document.getElementById("limit").textContent=money(c.limit);document.getElementById("pendingBalance").textContent=money(c.pending);renderCharts();renderActivity();renderClientWithdrawalUpdates()}
