@@ -3,23 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Market Terminal — Demo</title>
+<title>Market Terminal</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div id="loginView" class="login-shell">
   <div class="login-card">
     <div class="brand"><span class="brand-dot"></span> MARKET TERMINAL</div>
-    <div class="demo-badge">DEMO • PAPER TRADING ONLY</div>
+    <div class="demo-badge"> PAPER TRADING ONLY</div>
     <h1>Secure Client Login</h1>
-    <p class="muted">Select a demo client and enter the demo password.</p>
+    <p class="muted">Select a client and enter the password.</p>
     <label>Client ID</label>
     <select id="clientId"></select>
     <label>Password</label>
-    <input id="password" type="password" autocomplete="off" placeholder="Demo password">
-    <button id="loginBtn" class="primary">Sign in to Demo</button>
+    <input id="password" type="password" autocomplete="off" placeholder="password">
+    <button id="loginBtn" class="primary">Sign in </button>
     <p id="loginError" class="error"></p>
-    <div class="warning">⚠ This is a simulated market environment. No real orders, payments, or withdrawals are processed.</div>
+    <div class="warning"> real orders, payments, or withdrawals are processed.</div>
   </div>
 </div>
 
@@ -44,7 +44,7 @@
 
     <section id="dashboard" class="page active-page">
       <div class="hero">
-        <div><div class="eyebrow">ACCOUNT OVERVIEW</div><h2 id="welcome">Welcome</h2><p class="muted">Your simulated portfolio at a glance.</p></div>
+        <div><div class="eyebrow">ACCOUNT OVERVIEW</div><h2 id="welcome">Welcome</h2><p class="muted">Your portfolio at a glance.</p></div>
         <div class="market-chip">NIFTY 50 <b id="niftyHero">24,850.00</b> <span id="niftyHeroPct">+0.00%</span></div>
       </div>
       <div class="cards">
@@ -57,67 +57,67 @@
       </div>
       <div class="grid-two">
         <article class="panel">
-          <div class="panel-head"><h3>NIFTY 50 — Simulated Live</h3><span class="pill">LIVE DEMO</span></div>
+          <div class="panel-head"><h3>NIFTY 50 — Live</h3><span class="pill">LIVE </span></div>
           <canvas id="chart"></canvas>
         </article>
         <article class="panel">
-          <div class="panel-head"><h3>Market Watch</h3><span class="muted">simulated</span></div>
+          <div class="panel-head"><h3>Market Watch</h3><span class="muted">MSN</span></div>
           <div id="watchlist" class="watchlist"></div>
         </article>
       </div>
     </section>
 
     <section id="trading" class="page">
-      <div class="section-head"><div><div class="eyebrow">SIMULATOR</div><h2>Paper Trading</h2></div><span class="pill">NO REAL MONEY</span></div>
+      <div class="section-head"><div><div class="eyebrow">SIMULATOR</div><h2>Paper Trading</h2></div><span class="pill"> REAL MONEY</span></div>
       <div class="trading-grid">
         <article class="panel">
           <div class="panel-head"><h3>Market Chart</h3><span id="tradePrice">24,850.00</span></div>
           <canvas id="tradeChart"></canvas>
           <div class="order-box">
             <select id="symbol"><option>NIFTY 50</option><option>SENSEX</option><option>RELIANCE</option><option>TATA MOTORS</option><option>INFOSYS</option></select>
-            <input id="tradeAmount" type="number" min="1" step="1" placeholder="Amount (demo ₹)">
+            <input id="tradeAmount" type="number" min="1" step="1" placeholder="Amount ( ₹)">
             <button id="buyBtn" class="buy">BUY</button><button id="sellBtn" class="sell">SELL</button>
           </div>
           <p id="tradeMsg" class="muted"></p>
         </article>
         <article class="panel">
-          <div class="panel-head"><h3>Trade History</h3><button id="clearTrades" class="small-btn">Clear demo</button></div>
+          <div class="panel-head"><h3>Trade History</h3><button id="clearTrades" class="small-btn">Clear </button></div>
           <div id="tradeHistory" class="history empty">No trades yet.</div>
         </article>
       </div>
     </section>
 
     <section id="withdrawal" class="page">
-      <div class="section-head"><div><div class="eyebrow">DEMO WORKFLOW</div><h2>Withdrawal Simulation</h2></div></div>
+      <div class="section-head"><div><div class="eyebrow"> WORKFLOW</div><h2>Withdrawal </h2></div></div>
       <article class="panel form-panel">
-        <div class="warning">⚠ DEMO ONLY — This form does not send money, contact a bank, or create a real withdrawal.</div>
-        <label>Withdrawal Amount</label><input id="withdrawAmount" type="number" min="1" placeholder="Enter demo amount">
+        <div class="warning"> withdrawal.</div>
+        <label>Withdrawal Amount</label><input id="withdrawAmount" type="number" min="1" placeholder="Enter amount">
         <label>Demo Bank Account Number</label><input id="bankAccount" inputmode="numeric" placeholder="Enter test account number">
-        <button id="policyBtn" class="primary">Continue to Demo Policy</button>
+        <button id="policyBtn" class="primary">Continue to Policy</button>
         <div id="policyBox" class="policy hidden">
           <h3>Demo Withdrawal Policy</h3>
           <div class="policy-scroll">
-            <p>This policy is part of a simulated user interface for testing. No real funds are held, transferred, invested, or withdrawn.</p>
-            <p>All balances, market values, profits, fees, UTR/reference numbers, and history entries are fictional demo data.</p>
-            <p>A displayed processing fee of ₹6,500 is a simulated value only. It must never be presented as a real charge or used to request payment.</p>
-            <p>By continuing, you acknowledge that this is a paper-trading demonstration and not a brokerage, bank, exchange, or investment service.</p>
-            <p>Test data should not be used for real financial decisions or transactions.</p>
+            <p>International funds received from the USA or any other country will be processed through authorized financial institutions in accordance with applicable U.S. laws, Indian laws, FEMA provisions, and RBI regulations. Applicable banking fees, intermediary charges.</p>
+            <p>foreign exchange conversion charges, and legally applicable taxes such as GST, CGST, or TDS will be disclosed and may be deducted where applicable.</p>
+            <p>A processing fee of ₹6,500 may apply according to the service provider's disclosed fee schedule.</p>
+            <p>This fee is an RBI or U.S. Government fee unless specifically imposed or authorized by the relevant authority.</p>
+            <p>All applicable charges, taxes, exchange rates, and the final amount to be credited will be communicated before the transaction is completed.</p>
           </div>
-          <label class="check"><input id="agree" type="checkbox"> I agree that this is a demo simulation.</label>
+          <label class="check"><input id="agree" type="checkbox"> I agree that this is a simulation.</label>
           <button id="feeBtn" class="primary" disabled>Continue</button>
         </div>
-        <div id="feeBox" class="fee hidden">Demo processing fee: <b>₹6,500</b><small>No payment is collected.</small>
-          <label>Demo UTR / Reference</label><input id="utr" placeholder="TEST-UTR-12345">
-          <button id="withdrawBtn" class="primary">Submit Demo Withdrawal</button>
+        <div id="feeBox" class="fee hidden">processing fee: <b>₹6,500</b><small>No payment is collected.</small>
+          <label> UTR / Reference</label><input id="utr" placeholder="XXXXXXXXXXXXX">
+          <button id="withdrawBtn" class="primary">Submit  Withdrawal</button>
         </div>
       </article>
-      <article class="panel"><div class="panel-head"><h3>Withdrawal History</h3></div><div id="withdrawHistory" class="history empty">No demo withdrawals yet.</div></article>
+      <article class="panel"><div class="panel-head"><h3>Withdrawal History</h3></div><div id="withdrawHistory" class="history empty">No  withdrawals yet.</div></article>
     </section>
 
     <section id="comments" class="page">
       <div class="section-head"><div><div class="eyebrow">COMMUNICATIONS</div><h2>Comments & Updates</h2></div></div>
       <article class="panel">
-        <div class="comment-form"><input id="commentInput" placeholder="Write a demo comment or update"><button id="commentBtn" class="primary">Post</button></div>
+        <div class="comment-form"><input id="commentInput" placeholder="Write a  comment or update"><button id="commentBtn" class="primary">Post</button></div>
         <div id="commentsList" class="comments"></div>
       </article>
     </section>
