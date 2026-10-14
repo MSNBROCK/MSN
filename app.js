@@ -12,8 +12,7 @@ const CLIENTS=[
 ["Yashvantha","BRCLT-YASHVANTHA","YAS129",6000000,3000],
 ["Adarsh","BRCLT-ADARSH","ADA129",200,3000],
 ["Sadik","BRCLT-ADIK","SAD129",25000,1000],
-["Tanveer","BRCLT-TANVEER","TAN129",3550000,500]
-];
+["Tanveer","BRCLT-TANVEER","TAN129",3550000,500],
 const $=id=>document.getElementById(id);
 const money=n=>"₹"+Math.round(n).toLocaleString("en-IN");
 const key=id=>"mtdemo_"+id;
