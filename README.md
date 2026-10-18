@@ -13,7 +13,7 @@ A static, single-page HTML. Upload `index.html`, `README.md`, and `.nojekyll` .
 - CSV exports for clients, orders, and a combined financial report; JSON backup and local reset
 - Browser `localStorage`; no server-side database
 
-## Demo sign-in
+##  sign-in
 - Admin: Username `Admin`, Client ID `MSN`, Password `ADMIN`
 - Client example: Username ``, Client ID `BRCLT`, Password `XXXX`
 
