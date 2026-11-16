@@ -96,8 +96,8 @@ window.CLIENTS = [
     "role": "client"
   },
   {
-    "name": "Devraj",
-    "id": "BRCLT-DEVRAJ",
+    "name": "VINAYAK",
+    "id": "BRCLT-VIN129",
     "password": "DEV129",
     "balance": 5600000,
     "invested": 4000000,
