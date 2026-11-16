@@ -132,14 +132,14 @@ window.CLIENTS = [
     "role": "client"
   },
   {
-    "name": "NADEEM",
-    "id": "BRCLT-NAD129",
-    "password": "129129",
-    "balance": 200,
-    "invested": 0,
-    "pending": 0,
-    "shares": 0,
-    "nextShares": 0,
+    "name": "BHARATH",
+    "id": "BRCLT-BHA129",
+    "password": "BHA129",
+    "balance": 500000,
+    "invested": 200000,
+    "pending": 550000,
+    "LOSS": -300000,
+    "nextShares": 1/12/2026,
     "pnl": 0,
     "role": "client"
   },
