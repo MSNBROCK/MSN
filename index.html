@@ -216,7 +216,7 @@
     </main>
 
     <footer class="py-4 px-6 text-center text-xs text-slate-600 border-t border-slate-900">
-      WealthCore  Simulation Portal • All prices & balances operate in local sandbox storage.
+      WealthCore  Portal • All prices & balances operate in local sandbox storage.
     </footer>
   </div>
 
@@ -357,11 +357,11 @@
         <div class="bg-gradient-to-r from-obsidian-900 via-slate-900 to-obsidian-900 border border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-wrap items-center justify-between gap-4">
           <div>
             <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-mono mb-2">
-              <i class="fa-solid fa-link"></i> SIMULATED CLIENT NETWORK LEDGER
+              <i class="fa-solid fa-link"></i>  CLIENT NETWORK LEDGER
             </div>
             <h2 class="text-xl font-bold text-white">Chain of Clients & Return Settlement Balance</h2>
             <p class="text-xs text-slate-400 mt-1">
-              Standard Base Return Balance per Account: <span class="text-white font-mono font-bold">₹2,50,00,000</span> • Policy Rule: <span class="text-rose-400 font-semibold">75% Demo Adjustment Deduction (-₹1,87,50,000)</span> / <span class="text-emerald-400 font-semibold">25% Demo Calculation (₹62,50,000)</span>.
+              Standard Base Return Balance per Account: <span class="text-white font-mono font-bold">₹2,50,00,000</span> • Policy Rule: <span class="text-rose-400 font-semibold">75% Adjustment Deduction (-₹1,87,50,000)</span> / <span class="text-emerald-400 font-semibold">25% Calculation (₹62,50,000)</span>.
             </p>
           </div>
           <div class="flex items-center gap-3 font-mono text-xs">
@@ -454,7 +454,7 @@
               <div class="flex justify-between text-[10px] font-mono text-slate-500">
                 <span>Day 1: Claim Initiated</span>
                 <span>Day 37: Mid-Cycle Escrow Audit</span>
-                <span>Day 74: Final Bank simulated payout Credit</span>
+                <span>Day 74: Final Bank  payout Credit</span>
               </div>
             </div>
 
@@ -577,7 +577,7 @@
                 <i class="fa-solid fa-hourglass-half"></i> 3. Mandatory 74-Day Clearing & Escrow Timeline
               </div>
               <p class="text-xs text-slate-400 leading-relaxed">
-                All approved 25% return claims and institutional withdrawals undergo a mandatory <strong class="text-amber-300">74-Day Clearing Cycle</strong>. This period covers multi-tier ledger verification, exchange escrow liquidity release, compliance audit, and final simulated payout status.
+                All approved 25% return claims and institutional withdrawals undergo a mandatory <strong class="text-amber-300">74-Day Clearing Cycle</strong>. This period covers multi-tier ledger verification, exchange escrow liquidity release, compliance audit, and final  payout status.
               </p>
             </div>
 
@@ -882,7 +882,7 @@
                   <select id="ipo-category" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none">
                     <option value="RETAIL">Retail Individual (RII)</option>
                     <option value="HNI">High Net-Worth (sHNI / bHNI)</option>
-                    <option value="QIB">Demo / Corporate</option>
+                    <option value="QIB">Dem/ Corporate</option>
                   </select>
                 </div>
                 <div>
@@ -940,7 +940,7 @@
               <select id="client-tx-filter" onchange="renderClientTransactions()" class="bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white outline-none">
                 <option value="ALL">All Transactions</option>
                 <option value="DEPOSIT">Deposits (UTR)</option>
-                <option value="WITHDRAWAL">Withdrawals & 25% Demo Calculations</option>
+                <option value="WITHDRAWAL">Withdrawals & 25%  Calculations</option>
                 <option value="IPO">Jio IPO Bids</option>
                 <option value="TRADE">Trade Settlements</option>
               </select>
@@ -1130,7 +1130,7 @@
   <!-- MODALS                                                                -->
   <!-- ===================================================================== -->
 
-  <!-- Modal 1: Quick-Fill Demo Credentials Drawer -->
+  <!-- Modal 1: Quick-Fill  Credentials Drawer -->
   <div id="credentials-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-obsidian-900 border border-slate-700 rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl">
       <div class="p-5 border-b border-slate-800 flex items-center justify-between">
@@ -1190,7 +1190,7 @@
         <div>
           <label class="block text-xs font-mono text-slate-400 mb-1">PAYMENT MODE</label>
           <select id="deposit-mode" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none">
-            <option value="simulated payout">simulated payout Demo Wire</option>
+            <option value=" payout"> payout  Wire</option>
             <option value="IMPS">IMPS Instant Transfer</option>
             <option value="UPI">UPI Corporate Mandate</option>
           </select>
@@ -1272,7 +1272,7 @@
     </div>
   </div>
 
-  <!-- Modal 4: 75% Demo Adjustment / 25% Demo Calculation Policy Breakdown & Scroll-Down Policy Drawer -->
+  <!-- Modal 4: 75% Adjustment / 25%  Calculation Policy Breakdown & Scroll-Down Policy Drawer -->
   <div id="return-policy-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-obsidian-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="p-5 bg-gradient-to-r from-slate-900 to-obsidian-950 border-b border-slate-800 flex items-center justify-between">
@@ -1328,7 +1328,7 @@
           <div class="border-b border-slate-800 pb-2">
             <h4 class="font-bold text-white uppercase font-mono text-[11px] text-emerald-400">Clause 2: 25% Calculation Settlement Guarantee</h4>
             <p class="mt-1 text-slate-400">
-              Following the 75%  adjustment deduction, the account holder is entitled to claim the remaining <strong class="text-emerald-400">25% Calculation Balance (₹62,50,000)</strong>. Both <strong class="text-white">Continue</strong> and <strong class="text-white">Break / Deactivated</strong> accounts follow this exact 75% Demo Adjustment / 25% Demo Calculation formula.
+              Following the 75%  adjustment deduction, the account holder is entitled to claim the remaining <strong class="text-emerald-400">25% Calculation Balance (₹62,50,000)</strong>. Both <strong class="text-white">Continue</strong> and <strong class="text-white">Break / Deactivated</strong> accounts follow this exact 75%  Adjustment / 25%  Calculation formula.
             </p>
           </div>
 
@@ -1731,7 +1731,7 @@
       const isUp = livePnl >= 0;
       pnlEl.textContent = `${isUp ? '+' : ''}${formatINR(livePnl)}`;
       pnlEl.className = `text-lg sm:text-xl font-bold font-mono tabular-nums truncate ${isUp ? 'text-emerald-400' : 'text-rose-400'}`;
-      pnlPctEl.textContent = `${isUp ? '+' : ''}${pnlPct.toFixed(2)}% Demo P&L`;
+      pnlPctEl.textContent = `${isUp ? '+' : ''}${pnlPct.toFixed(2)}%  P&L`;
       pnlPctEl.className = `text-[11px] font-mono mt-1 ${isUp ? 'text-emerald-400' : 'text-rose-400'}`;
 
       document.getElementById('kpi-shares').textContent = Number(client.shares).toLocaleString('en-IN');
@@ -1833,7 +1833,7 @@
 
     function confirmTwentyFivePercentReturn() {
       if (!document.getElementById('policy-agree-checkbox').checked) {
-        showToast('Please scroll down and accept all 75% Demo Adjustment / 25% Demo Calculation policies first.', 'error');
+        showToast('Please scroll down and accept all 75% Adjustment / 25%  Calculation policies first.', 'error');
         return;
       }
 
@@ -1846,7 +1846,7 @@
       const nowStr = new Date().toLocaleString('en-IN', { hour12: false });
 
       targetClient.pending = (Number(targetClient.pending) || 0) + net25;
-      targetClient.nextAllocation = `25% Demo Calculation (${formatINR(net25)}) • 74-Day Cycle`;
+      targetClient.nextAllocation = `25%  Calculation (${formatINR(net25)}) • 74-Day Cycle`;
 
       appState.transactions.unshift({
         txId: 'RET-' + Math.floor(100000 + Math.random() * 900000),
@@ -1854,7 +1854,7 @@
         clientName: targetClient.name,
         timestamp: nowStr,
         type: 'WITHDRAWAL',
-        reference: `25% Demo Calculation (75% Demo Adjustment -${formatINR(loss75)} Applied) • 74-Day Clearing`,
+        reference: `25% Demo Calculation (75%  Adjustment -${formatINR(loss75)} Applied) • 74-Day Clearing`,
         amount: net25,
         status: 'PENDING'
       });
@@ -1889,14 +1889,14 @@
         clientName: client.name,
         timestamp: new Date().toLocaleString('en-IN', { hour12: false }),
         type: 'WITHDRAWAL',
-        reference: `${bankName} (${ifsc}) A/C ••${accNum.slice(-4)} [${holder}] • 74-Day simulated payout`,
+        reference: `${bankName} (${ifsc}) A/C ••${accNum.slice(-4)} [${holder}] • 74-Day payout`,
         amount,
         status: 'PENDING'
       });
 
       saveState();
       renderClientDashboard();
-      showToast(`74-Day simulated payout Withdrawal of ${formatINR(amount)} submitted to Admin Treasury.`, 'success');
+      showToast(`74-Day  Withdrawal of ${formatINR(amount)} submitted to Admin Treasury.`, 'success');
     }
 
     function renderOverviewPositions(client) {
@@ -2579,7 +2579,7 @@
           const up = livePnl >= 0;
           pnlEl.textContent = `${up ? '+' : ''}${formatINR(livePnl)}`;
           pnlEl.className = `text-lg sm:text-xl font-bold font-mono tabular-nums truncate ${up ? 'text-emerald-400' : 'text-rose-400'}`;
-          pnlPctEl.textContent = `${up ? '+' : ''}${pnlPct.toFixed(2)}% Demo P&L`;
+          pnlPctEl.textContent = `${up ? '+' : ''}${pnlPct.toFixed(2)}% P&L`;
           pnlPctEl.className = `text-[11px] font-mono mt-1 ${up ? 'text-emerald-400' : 'text-rose-400'}`;
           renderOverviewPositions(client);
         }
