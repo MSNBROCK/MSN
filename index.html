@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Educational paper-trading simulation. No real money, trading, banking or investment services." />
-  <title>WealthCore Demo | Simulated Share Market & Portfolio Terminal</title>
+  <meta name="description" content="paper-trading s. real money, trading, banking or investment services." />
+  <title>Brock | Simulated Share Market & Portfolio Terminal</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Inter & JetBrains Mono for tabular financial precision -->
@@ -77,15 +77,15 @@
 </head>
 <body class="min-h-screen flex flex-col bg-obsidian-950 text-slate-200 selection:bg-emerald-500/30 selection:text-emerald-200">
   <div role="alert" class="sticky top-0 z-[100] bg-amber-300 text-slate-950 text-center px-3 py-2 text-xs sm:text-sm font-extrabold shadow-lg">
-    DEMO / COLLEGE PROJECT ONLY — All balances, prices, IPOs, returns, reference IDs and payout statuses are fictional.
-    No real trading, bank transfer, investment, regulatory approval or guaranteed return. Never enter real banking or identity details.
+    All balances, prices, IPOs, returns, reference IDs and payout statuses are fictional.
+    real trading, bank transfer, investment, regulatory approval or guaranteed return.  enter real banking or identity details.
   </div>
 
   <!-- Toast Notification Container (Replaces alert/confirm) -->
   <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
   <!-- ===================================================================== -->
-  <!-- VIEW 1: LOGIN & DEMO CREDENTIALS PORTAL                               -->
+  <!-- VIEW 1: LOGIN &  CREDENTIALS PORTAL                               -->
   <!-- ===================================================================== -->
   <div id="auth-view" class="min-h-screen flex flex-col justify-between bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-obsidian-950 to-obsidian-950">
     <!-- Top Brand Header -->
@@ -96,13 +96,13 @@
         </div>
         <div>
           <span class="font-bold text-lg tracking-tight text-white">WEALTH<span class="text-emerald-400">CORE</span></span>
-          <span class="hidden sm:inline-block ml-2 text-[11px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">Demo Settlement & Portfolio Portal</span>
+          <span class="hidden sm:inline-block ml-2 text-[11px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700"> Settlement & Portfolio Portal</span>
         </div>
       </div>
       <div class="flex items-center gap-3">
         <span class="flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-950/50 border border-emerald-800/60 px-3 py-1.5 rounded-full">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          DEMO TIMELINE DISPLAY
+           TIMELINE DISPLAY
         </span>
       </div>
     </header>
@@ -115,7 +115,7 @@
         <div class="lg:col-span-5 bg-gradient-to-b from-slate-900 to-obsidian-950 p-6 sm:p-8 border-b lg:border-b-0 lg:border-r border-slate-800 flex flex-col justify-between">
           <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium mb-6">
-              <i class="fa-solid fa-shield-halved"></i> Educational Simulation Terminal
+              <i class="fa-solid fa-shield-halved"></i>  Terminal
             </div>
             <h1 class="text-2xl sm:text-3xl font-bold text-white leading-tight mb-3">
               Multi-Asset Wealth & Equity Execution Desk
@@ -143,9 +143,9 @@
           </div>
 
           <div class="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
-            <span>Browser local storage (not secure)</span>
-            <button type="button" onclick="resetDemoDatabase()" class="text-slate-400 hover:text-rose-400 underline transition">
-              Reset Demo Data
+            <span>Browser local storage </span>
+            <button type="button" onclick="resetDatabase()" class="text-slate-400 hover:text-rose-400 underline transition">
+              Reset  Data
             </button>
           </div>
         </div>
@@ -216,7 +216,7 @@
     </main>
 
     <footer class="py-4 px-6 text-center text-xs text-slate-600 border-t border-slate-900">
-      WealthCore Demo Simulation Portal • All prices & balances operate in local sandbox storage.
+      WealthCore  Simulation Portal • All prices & balances operate in local sandbox storage.
     </footer>
   </div>
 
@@ -257,7 +257,7 @@
             <i class="fa-solid fa-diagram-project mr-1.5 text-amber-400"></i>Client Chain & Return
           </button>
           <button onclick="switchClientTab('terminal')" data-ctab="terminal" class="client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
-            <i class="fa-solid fa-arrow-trend-up mr-1.5"></i>Simulated Market & Trade
+            <i class="fa-solid fa-arrow-trend-up mr-1.5"></i>  Market & Trade
           </button>
           <button onclick="switchClientTab('ipo')" data-ctab="ipo" class="client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
             <i class="fa-solid fa-rocket mr-1.5 text-emerald-400"></i>Jio IPO Desk
@@ -324,11 +324,11 @@
 
         <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition">
           <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
-            <span>Simulated Profit & Loss</span>
+            <span>  Profit & Loss</span>
             <i class="fa-solid fa-chart-pie text-emerald-400"></i>
           </div>
           <div id="kpi-pnl" class="text-lg sm:text-xl font-bold font-mono text-emerald-400 tabular-nums truncate">+₹0</div>
-          <div id="kpi-pnl-pct" class="text-[11px] font-mono text-emerald-400 mt-1">+0.00% Demo P&L</div>
+          <div id="kpi-pnl-pct" class="text-[11px] font-mono text-emerald-400 mt-1">+0.00%  P&L</div>
         </div>
 
         <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition">
@@ -431,12 +431,12 @@
                     <h2 class="text-lg font-bold text-white">74-Day Demo Settlement Cycle</h2>
                     <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold">PROCESSING</span>
                   </div>
-                  <p class="text-xs text-slate-400">Mandatory illustrative review (not a regulatory process) & 75% Demo Adjustment-Adjusted Payout Window</p>
+                  <p class="text-xs text-slate-400">Mandatory illustrative review (not a regulatory process) & 75% Adjustment-Adjusted Payout Window</p>
                 </div>
               </div>
               <div class="text-right font-mono">
                 <div class="text-xs text-slate-400">Current Clearing Day</div>
-                <div id="settlement-day-counter" class="text-lg font-bold text-amber-400">Day 12 / 74 Days</div>
+                <div id="settlement-day-counter" class="text-lg font-bold text-amber-400">Day 1 / 74 Days</div>
               </div>
             </div>
 
@@ -444,7 +444,7 @@
               <div class="flex items-center justify-between text-xs font-mono">
                 <span class="text-slate-300 flex items-center gap-2">
                   <i class="fa-solid fa-spinner fa-spin text-emerald-400"></i>
-                  <span id="settlement-status-text">Stage 1 Active: 75% Demo Adjustment Deduction & 25% Demo Calculation Verification</span>
+                  <span id="settlement-status-text">Stage 1 Active: 75%  Adjustment Deduction & 25%  Calculation Verification</span>
                 </span>
                 <span id="settlement-pct-label" class="font-bold text-emerald-400">16.2%</span>
               </div>
@@ -496,7 +496,7 @@
                 <div class="mt-0.5 text-slate-500"><i class="fa-solid fa-building-columns"></i></div>
                 <div class="flex-1">
                   <div class="flex items-center justify-between text-xs font-bold text-slate-300">
-                    <span>Phase 4 (Days 63 – 74): Final Simulated payout status update</span>
+                    <span>Phase 4 (Days 63 – 74): Final  payout status update</span>
                     <span class="font-mono text-[10px] text-slate-500">DAY 74 RELEASE</span>
                   </div>
                   <p class="text-[11px] text-slate-400 mt-0.5">Direct settlement to verified beneficiary bank account with 16-digit UTR confirmation.</p>
@@ -505,37 +505,37 @@
             </div>
           </div>
 
-          <!-- Right 5 Cols: Realistic Demo Bank Withdrawal Form -->
+          <!-- Right 5 Cols: Realistic  Bank Withdrawal Form -->
           <div class="lg:col-span-5 bg-obsidian-900 border border-slate-800 rounded-2xl p-5 sm:p-6">
             <div class="flex items-center justify-between mb-4">
               <div>
-                <h3 class="font-bold text-white text-base">Simulated Payout Request</h3>
+                <h3 class="font-bold text-white text-base">  Payout Request</h3>
                 <p class="text-xs text-slate-400">Initiate a 74-day cycle withdrawal to your linked bank account</p>
               </div>
               <span class="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-[10px]">
-                <i class="fa-solid fa-lock mr-1"></i>LOCAL DEMO ONLY
+                <i class="fa-solid fa-lock mr-1"></i>LOCAL ONLY
               </span>
             </div>
 
             <form onsubmit="handleRealisticWithdrawalSubmit(event)" class="space-y-3.5">
               <div class="rounded-xl border border-amber-500/40 bg-amber-950/30 p-3 text-[11px] text-amber-200">
-                Simulation only. Do not enter a real account number, IFSC, Aadhaar, PAN, UPI ID or other personal information.
+                 enter a real account number, IFSC, Aadhaar, PAN, UPI ID or other personal information.
                 This form only changes fictional balances stored in this browser.
               </div>
               <div>
-                <label class="block text-[11px] font-mono text-slate-400 mb-1">DEMO BENEFICIARY NAME</label>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1"> BENEFICIARY NAME</label>
                 <input id="wdr-holder" type="text" required maxlength="40" placeholder="Sample name only" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none focus:border-emerald-500" />
               </div>
               <div>
-                <label class="block text-[11px] font-mono text-slate-400 mb-1">SIMULATED PAYOUT AMOUNT (₹)</label>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1"> PAYOUT AMOUNT (₹)</label>
                 <input id="wdr-amt" type="number" min="1" step="1" value="5000" required class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none focus:border-emerald-500" />
               </div>
               <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-3 text-[11px] font-mono space-y-1">
                 <div class="flex justify-between text-slate-400"><span>Processing:</span><span class="text-amber-400 font-bold">Simulated only</span></div>
-                <div class="text-slate-500">No funds are transferred. No bank or payment network is connected.</div>
+                <div class="text-slate-500"> funds are transferred.  bank or payment network is connected.</div>
               </div>
               <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-flask"></i> Submit Demo Payout Request
+                <i class="fa-solid fa-flask"></i> Submit  Payout Request
               </button>
             </form>
           </div>
@@ -543,14 +543,14 @@
       </div>
 
       <!-- ================================================================= -->
-      <!-- SUB-TAB: DEMO INFORMATION & POLICY GUIDELINES SECTION    -->
+      <!-- SUB-TAB:  INFORMATION & POLICY GUIDELINES SECTION    -->
       <!-- ================================================================= -->
       <div id="ctab-info" class="hidden space-y-6">
         <div class="bg-obsidian-900 border border-slate-800 rounded-2xl p-6 space-y-6">
           <div class="border-b border-slate-800 pb-4">
-            <span class="text-xs font-mono uppercase tracking-wider text-purple-400">Demo Project Documentation</span>
-            <h2 class="text-2xl font-bold text-white mt-1">Demo Information, Chain Rules & Settlement Policies</h2>
-            <p class="text-xs text-slate-400 mt-1">Complete operational disclosure for Continue vs. Break/Deactivated accounts, 75% Demo Adjustment deductions, and the 74-Day payout window.</p>
+            <span class="text-xs font-mono uppercase tracking-wider text-purple-400">  Project Documentation</span>
+            <h2 class="text-2xl font-bold text-white mt-1">  Information, Chain Rules & Settlement Policies</h2>
+            <p class="text-xs text-slate-400 mt-1">Complete operational disclosure for Continue vs. Break/Deactivated accounts, 75%  Adjustment deductions, and the 74-Day payout window.</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -565,10 +565,10 @@
 
             <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-5 space-y-2">
               <div class="flex items-center gap-2 text-rose-400 font-bold text-sm">
-                <i class="fa-solid fa-percent"></i> 2. 75% Demo Adjustment & 25% Demo Calculation Formula
+                <i class="fa-solid fa-percent"></i> 2. 75%  Adjustment & 25% Calculation Formula
               </div>
               <p class="text-xs text-slate-400 leading-relaxed">
-                Every account carries a standardized Return Base Balance of <strong class="text-white font-mono">₹2,50,00,000</strong>. Upon triggering the <strong class="text-white">Return</strong> button, institutional risk-sharing rules apply a <strong class="text-rose-400">75% Market Loss & Break Charge (-₹1,87,50,000)</strong>, releasing the remaining <strong class="text-emerald-400">25% Demo Calculation Payout (₹62,50,000)</strong> to the withdrawal queue.
+                Every account carries a standardized Return Base Balance of <strong class="text-white font-mono">₹2,50,00,000</strong>. Upon triggering the <strong class="text-white">Return</strong> button, institutional risk-sharing rules apply a <strong class="text-rose-400">75% Market Loss & Break Charge (-₹1,87,50,000)</strong>, releasing the remaining <strong class="text-emerald-400">25%  Calculation Payout (₹62,50,000)</strong> to the withdrawal queue.
               </p>
             </div>
 
@@ -638,7 +638,7 @@
                 <h3 class="font-bold text-white text-sm flex items-center gap-2">
                   <i class="fa-solid fa-bolt text-emerald-400"></i> Instant Order Execution
                 </h3>
-                <span class="text-[11px] font-mono text-slate-400">SIMULATED FEES</span>
+                <span class="text-[11px] font-mono text-slate-400">  FEES</span>
               </div>
 
               <div class="grid grid-cols-2 gap-2 p-1 bg-obsidian-950 border border-slate-800 rounded-xl mb-4">
@@ -985,7 +985,7 @@
             <div class="flex items-center gap-2">
               <span class="font-bold text-base text-white tracking-tight">WEALTH<span class="text-amber-400">CORE</span> ADMIN</span>
               <span class="px-2 py-0.5 text-[10px] font-mono uppercase rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                Demo Admin Control
+                Admin Control
               </span>
             </div>
             <p class="text-[11px] text-slate-400 font-mono">Managing 14 Sample Client Accounts (Continue & Break/Dead)</p>
@@ -1075,7 +1075,7 @@
 
       <div id="atab-withdrawals" class="hidden bg-obsidian-900 border border-slate-800 rounded-2xl overflow-hidden">
         <div class="p-5 border-b border-slate-800">
-          <h3 class="font-bold text-white text-base">74-Day Withdrawal & 25% Demo Calculation Approval Queue</h3>
+          <h3 class="font-bold text-white text-base">74-Day Withdrawal & 25% Calculation Approval Queue</h3>
           <p class="text-xs text-slate-400">Approving finalizes the payout and clears Pending Amount. Rejecting refunds the amount back to the client's Available Balance.</p>
         </div>
         <div class="overflow-x-auto">
@@ -1297,13 +1297,13 @@
           </div>
 
           <div class="bg-rose-950/30 border border-rose-800/60 rounded-xl p-3.5">
-            <div class="text-[10px] text-rose-300 uppercase font-bold">75% Demo Adjustment Deduction</div>
+            <div class="text-[10px] text-rose-300 uppercase font-bold">75%  Adjustment Deduction</div>
             <div id="ret-loss-amt" class="text-base font-bold text-rose-400 mt-1 tabular-nums">-₹1,87,50,000</div>
             <div class="text-[10px] text-rose-300/70 mt-0.5">Market Loss & Break Charge</div>
           </div>
 
           <div class="bg-emerald-950/30 border border-emerald-700/60 rounded-xl p-3.5">
-            <div class="text-[10px] text-emerald-300 uppercase font-bold">25% Demo Calculation Payout</div>
+            <div class="text-[10px] text-emerald-300 uppercase font-bold">25% Calculation Payout</div>
             <div id="ret-net-amt" class="text-base font-bold text-emerald-400 mt-1 tabular-nums">₹62,50,000</div>
             <div class="text-[10px] text-emerald-300/70 mt-0.5">Eligible After 74 Days</div>
           </div>
@@ -1319,30 +1319,30 @@
 
         <div id="policies-scroll-box" class="h-52 overflow-y-auto bg-obsidian-950 border border-slate-800 rounded-xl p-4 space-y-4 text-xs text-slate-300 leading-relaxed scroll-smooth">
           <div class="border-b border-slate-800 pb-2">
-            <h4 class="font-bold text-white uppercase font-mono text-[11px] text-amber-400">Clause 1: 75% Demo Adjustment Deduction & Capital Adjustment Policy</h4>
+            <h4 class="font-bold text-white uppercase font-mono text-[11px] text-amber-400">Clause 1: 75%  Adjustment Deduction & Capital Adjustment Policy</h4>
             <p class="mt-1 text-slate-400">
-              Under WealthCore Demo Risk Clause 14(B), every client return balance of <strong class="text-white">₹2,50,00,000</strong> is subject to a mandatory <strong class="text-rose-400">75% Market Drawdown & Break Loss Charge (-₹1,87,50,000)</strong>. This deduction covers derivative margin shortfall, liquidity exit penalties, and chain-break settlement fees.
+              Under WealthCore  Risk Clause 14(B), every client return balance of <strong class="text-white">₹2,50,00,000</strong> is subject to a mandatory <strong class="text-rose-400">75% Market Drawdown & Break Loss Charge (-₹1,87,50,000)</strong>. This deduction covers derivative margin shortfall, liquidity exit penalties, and chain-break settlement fees.
             </p>
           </div>
 
           <div class="border-b border-slate-800 pb-2">
-            <h4 class="font-bold text-white uppercase font-mono text-[11px] text-emerald-400">Clause 2: 25% Demo Calculation Settlement Guarantee</h4>
+            <h4 class="font-bold text-white uppercase font-mono text-[11px] text-emerald-400">Clause 2: 25% Calculation Settlement Guarantee</h4>
             <p class="mt-1 text-slate-400">
-              Following the 75% demo adjustment deduction, the account holder is entitled to claim the remaining <strong class="text-emerald-400">25% Demo Calculation Balance (₹62,50,000)</strong>. Both <strong class="text-white">Continue</strong> and <strong class="text-white">Break / Deactivated</strong> accounts follow this exact 75% Demo Adjustment / 25% Demo Calculation formula.
+              Following the 75%  adjustment deduction, the account holder is entitled to claim the remaining <strong class="text-emerald-400">25% Calculation Balance (₹62,50,000)</strong>. Both <strong class="text-white">Continue</strong> and <strong class="text-white">Break / Deactivated</strong> accounts follow this exact 75% Demo Adjustment / 25% Demo Calculation formula.
             </p>
           </div>
 
           <div class="border-b border-slate-800 pb-2">
             <h4 class="font-bold text-white uppercase font-mono text-[11px] text-sky-400">Clause 3: 74-Day Demo Clearing & Withdrawal Cycle</h4>
             <p class="mt-1 text-slate-400">
-              Once the 25% Demo Calculation button is confirmed, the net payout of <strong class="text-white">₹62,50,000</strong> enters the <strong class="text-amber-300">74-Day Clearing & Escrow Settlement Pipeline</strong>. Funds remain visible under Pending Settlement with live milestone tracking until Day 74 simulated payout bank credit.
+              Once the 25%  Calculation button is confirmed, the net payout of <strong class="text-white">₹62,50,000</strong> enters the <strong class="text-amber-300">74-Day Clearing & Escrow Settlement Pipeline</strong>. Funds remain visible under Pending Settlement with live milestone tracking until Day 74 simulated payout bank credit.
             </p>
           </div>
 
           <div>
             <h4 class="font-bold text-white uppercase font-mono text-[11px] text-purple-400">Clause 4: Deactivated / Dead Node Finality</h4>
             <p class="mt-1 text-slate-400">
-              For Break / Dead / Deactivated clients (Bharatha, Devraj, Vinayaka, Ranjan, Yashvantha, Nadeem, Shabana), initiating the 25% Demo Calculation locks the final settlement claim and generates a permanent UTR audit receipt.
+              For Break / Dead / Deactivated clients (Bharatha, Devraj, Vinayaka, Ranjan, Yashvantha, Nadeem, Shabana), initiating the 25% Calculation locks the final settlement claim and generates a permanent UTR audit receipt.
             </p>
           </div>
         </div>
@@ -1350,7 +1350,7 @@
         <label class="flex items-start gap-2.5 cursor-pointer select-none bg-slate-900/80 border border-slate-800 p-3 rounded-xl">
           <input id="policy-agree-checkbox" type="checkbox" class="mt-0.5 rounded border-slate-600 text-emerald-600 focus:ring-emerald-500" />
           <span class="text-xs text-slate-300">
-            I have scrolled through and accepted all policies, including the <strong class="text-rose-400">75% Demo Adjustment (-₹1,87,50,000)</strong>, <strong class="text-emerald-400">25% Demo Calculation (₹62,50,000)</strong>, and the <strong class="text-amber-400">74-Day Settlement Timeline</strong>.
+            I have scrolled through and accepted all policies, including the <strong class="text-rose-400">75%  Adjustment (-₹1,87,50,000)</strong>, <strong class="text-emerald-400">25% Calculation (₹62,50,000)</strong>, and the <strong class="text-amber-400">74-Day Settlement Timeline</strong>.
           </span>
         </label>
 
@@ -1359,7 +1359,7 @@
             Cancel
           </button>
           <button type="button" onclick="confirmTwentyFivePercentReturn()" class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider shadow-lg transition">
-            Claim 25% Demo Calculation (₹62,50,000)
+            Claim 25% Calculation (₹62,50,000)
           </button>
         </div>
       </div>
@@ -1374,22 +1374,22 @@
 
     const INITIAL_CLIENTS = [
       // 7 CONTINUE / ACTIVE CLIENTS
-      { id: 'CLT-797555',     pass: 'ZAI129', name: 'Zayn',        chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 8500000, pending: 0, shares: 18500, nextAllocation: 'Jio Platforms Pre-IPO (5,000 Sh)', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-34781926',   pass: 'GUR129', name: 'Guru',        chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 6200000, pending: 0, shares: 14200, nextAllocation: 'Jio Platforms Anchor Lot', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-808835',     pass: 'RAN129', name: 'Ranoji',      chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 7400000, pending: 0, shares: 16100, nextAllocation: 'Reliance & Jio Demo Lot', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-TANVEERTAN', pass: 'TAN129', name: 'Tanveer',     chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 5100000, pending: 0, shares: 11800, nextAllocation: 'Jio IPO QIB Allotment', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-62845017',   pass: 'DHA129', name: 'Dhanush',     chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 4800000, pending: 0, shares: 10900, nextAllocation: 'Jio sHNI Tranche #1', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-45871293',   pass: 'SAM129', name: 'Samynk',      chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 9100000, pending: 0, shares: 21400, nextAllocation: 'Jio Platforms Pre-IPO Tranche', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-11223344',   pass: 'ABD129', name: 'Abdul Jafar', chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 6900000, pending: 0, shares: 15300, nextAllocation: 'Jio Demo Allocation', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-797555',     pass: 'ZAI129', name: 'Zayn',        chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 8500000, pending: 0, shares: 18500, nextAllocation: 'Jio Platforms Pre-IPO (5,000 Sh)', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-34781926',   pass: 'GUR129', name: 'Guru',        chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 6200000, pending: 0, shares: 14200, nextAllocation: 'Jio Platforms Anchor Lot', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-808835',     pass: 'RAN129', name: 'Ranoji',      chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 7400000, pending: 0, shares: 16100, nextAllocation: 'Reliance & Jio Demo Lot', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-TANVEERTAN', pass: 'TAN129', name: 'Tanveer',     chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 5100000, pending: 0, shares: 11800, nextAllocation: 'Jio IPO QIB Allotment', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-62845017',   pass: 'DHA129', name: 'Dhanush',     chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 4800000, pending: 0, shares: 10900, nextAllocation: 'Jio sHNI Tranche #1', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-45871293',   pass: 'SAM129', name: 'Samynk',      chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 9100000, pending: 0, shares: 21400, nextAllocation: 'Jio Platforms Pre-IPO Tranche', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-11223344',   pass: 'ABD129', name: 'Abdul Jafar', chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 6900000, pending: 0, shares: 15300, nextAllocation: 'Jio Demo Allocation', positions: [], trades: [], ipoApps: [] },
 
       // 7 BREAK / DEAD / DEACTIVATED CLIENTS
-      { id: 'CLT-BHARTH',     pass: 'BHA129', name: 'Bharatha',    chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 3200000, pending: 0, shares: 7400,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-DEVRAJ',     pass: 'DEV129', name: 'Devraj',      chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 2900000, pending: 0, shares: 6800,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-73456218',   pass: 'VIN129', name: 'Vinayaka',    chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 4100000, pending: 0, shares: 9200,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-55667788',   pass: 'RNJ129', name: 'Ranjan',      chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 2400000, pending: 0, shares: 5600,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-YASHVANTHA', pass: 'YAS129', name: 'Yashvantha',  chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 3750000, pending: 0, shares: 8300,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-91274051',   pass: 'NAD129', name: 'Nadeem',      chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 4500000, pending: 0, shares: 10100, nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
-      { id: 'CLT-SHABANA',    pass: 'SHA129', name: 'Shabana',     chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 1950000, pending: 0, shares: 4200,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] }
+      { id: 'BRCLT-BHARTH',     pass: 'BHA129', name: 'Bharatha',    chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 3200000, pending: 0, shares: 7400,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-DEVRAJ',     pass: 'DEV129', name: 'Devraj',      chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 2900000, pending: 0, shares: 6800,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-73456218',   pass: 'VIN129', name: 'Vinayaka',    chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 4100000, pending: 0, shares: 9200,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-55667788',   pass: 'RNJ129', name: 'Ranjan',      chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 2400000, pending: 0, shares: 5600,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-YASHVANTHA', pass: 'YAS129', name: 'Yashvantha',  chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 3750000, pending: 0, shares: 8300,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-91274051',   pass: 'NAD129', name: 'Nadeem',      chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 4500000, pending: 0, shares: 10100, nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'BRCLT-SHABANA',    pass: 'SHA129', name: 'Shabana',     chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 1950000, pending: 0, shares: 4200,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] }
     ];
 
     const MARKET_ASSETS = [
@@ -1507,13 +1507,13 @@
           clientName: 'Zayn',
           timestamp: '2026-11-20 10:15:00',
           type: 'DEPOSIT',
-          reference: 'UTR492018472910 (simulated payout)',
+          reference: 'UTR492018472910 ',
           amount: 25000000,
           status: 'COMPLETED'
         },
         {
           txId: 'TXN-908412',
-          clientId: 'CLT-34781926',
+          clientId: 'BRCLT-34781926',
           clientName: 'Guru',
           timestamp: '2026-11-20 11:40:22',
           type: 'IPO',
@@ -1535,11 +1535,11 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
     }
 
-    function resetDemoDatabase() {
+    function resetDatabase() {
       localStorage.removeItem(STORAGE_KEY);
       seedDefaultState();
       populateCredentialsModal();
-      showToast('Demo database reset to initial 14 client chain balances.', 'info');
+      showToast('database reset to initial 14 client chain balances.', 'info');
     }
 
     function getCurrentClient() {
@@ -1644,7 +1644,7 @@
           renderAdminDashboard();
           showToast('Authenticated as Master Admin.', 'success');
         } else {
-          errorText.textContent = 'Invalid Admin credentials. Use ADMIN / ADMIN129.';
+          errorText.textContent = 'Invalid Admin credentials. Use ADMIN /XXXX .';
           errorBox.classList.remove('hidden');
         }
         return;
@@ -1747,7 +1747,7 @@
     }
 
     /**
-     * Chain of Clients & 75% Demo Adjustment / 25% Demo Calculation Policy Engine
+     * Chain of Clients & 75% Adjustment / 25% Calculation Policy Engine
      */
     function renderClientChainSection() {
       const contList = document.getElementById('continue-chain-list');
@@ -1828,7 +1828,7 @@
         scrollBox.scrollTo({ top: scrollBox.scrollHeight, behavior: 'smooth' });
       }
       document.getElementById('policy-agree-checkbox').checked = true;
-      showToast('All 75% Demo Adjustment / 25% Demo Calculation policies scrolled & verified.', 'info');
+      showToast('All 75% Adjustment / 25% Calculation policies scrolled & verified.', 'info');
     }
 
     function confirmTwentyFivePercentReturn() {
@@ -1863,7 +1863,7 @@
       closeModal('return-policy-modal');
       renderClientDashboard();
       switchClientTab('withdrawal');
-      showToast(`25% Demo Calculation (${formatINR(net25)}) initiated for ${targetClient.name} into 74-Day Clearing.`, 'success');
+      showToast(`25% Calculation (${formatINR(net25)}) initiated for ${targetClient.name} into 74-Day Clearing.`, 'success');
     }
 
     function handleRealisticWithdrawalSubmit(e) {
@@ -2484,7 +2484,7 @@
             <div class="text-[10px] text-slate-500 font-mono">UTR: ${app.utr}</div>
           </div>
           ${app.status !== 'ALLOCATED' ? `
-            <button onclick="simulateIpoAllotment('${app.appId}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
+            <button onclick="IpoAllotment('${app.appId}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
               Simulate Allotment
             </button>
           ` : `<span class="text-xs font-mono text-emerald-400"><i class="fa-solid fa-check-double mr-1"></i>Credited</span>`}
@@ -2492,7 +2492,7 @@
       `).join('');
     }
 
-    function simulateIpoAllotment(appId) {
+    function IpoAllotment(appId) {
       const client = getCurrentClient();
       if (!client || !client.ipoApps) return;
       const app = client.ipoApps.find(a => a.appId === appId);
