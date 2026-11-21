@@ -1,0 +1,2955 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Educational paper-trading simulation. No real money, trading, banking or investment services." />
+  <title>WealthCore Demo | Simulated Share Market & Portfolio Terminal</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono for tabular financial precision -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for crisp terminal icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            obsidian: {
+              950: '#06090e',
+              900: '#0b0f17',
+              850: '#0f1520',
+              800: '#151d2b',
+              700: '#1e293b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom scrollbar and tabular numbers for terminal aesthetics */
+    body {
+      background-color: #06090e;
+      color: #e2e8f0;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: tickerScroll 36s linear infinite;
+    }
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-obsidian-950 text-slate-200 selection:bg-emerald-500/30 selection:text-emerald-200">
+  <div role="alert" class="sticky top-0 z-[100] bg-amber-300 text-slate-950 text-center px-3 py-2 text-xs sm:text-sm font-extrabold shadow-lg">
+    DEMO / COLLEGE PROJECT ONLY — All balances, prices, IPOs, returns, reference IDs and payout statuses are fictional.
+    No real trading, bank transfer, investment, regulatory approval or guaranteed return. Never enter real banking or identity details.
+  </div>
+
+  <!-- Toast Notification Container (Replaces alert/confirm) -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 1: LOGIN & DEMO CREDENTIALS PORTAL                               -->
+  <!-- ===================================================================== -->
+  <div id="auth-view" class="min-h-screen flex flex-col justify-between bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-obsidian-950 to-obsidian-950">
+    <!-- Top Brand Header -->
+    <header class="border-b border-slate-800/80 bg-obsidian-900/80 backdrop-blur-md px-4 sm:px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-lg shadow-emerald-950/50">
+          <i class="fa-solid fa-chart-line text-white text-lg"></i>
+        </div>
+        <div>
+          <span class="font-bold text-lg tracking-tight text-white">WEALTH<span class="text-emerald-400">CORE</span></span>
+          <span class="hidden sm:inline-block ml-2 text-[11px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">Demo Settlement & Portfolio Portal</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-950/50 border border-emerald-800/60 px-3 py-1.5 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          DEMO TIMELINE DISPLAY
+        </span>
+      </div>
+    </header>
+
+    <!-- Main Login Center Card -->
+    <main class="flex-1 flex items-center justify-center p-4 sm:p-6">
+      <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 bg-obsidian-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+        
+        <!-- Left Terminal Info Panel -->
+        <div class="lg:col-span-5 bg-gradient-to-b from-slate-900 to-obsidian-950 p-6 sm:p-8 border-b lg:border-b-0 lg:border-r border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium mb-6">
+              <i class="fa-solid fa-shield-halved"></i> Educational Simulation Terminal
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-white leading-tight mb-3">
+              Multi-Asset Wealth & Equity Execution Desk
+            </h1>
+            <p class="text-sm text-slate-400 leading-relaxed mb-6">
+              Access your private portfolio, trade Indian equities & digital assets in real-time INR (₹), subscribe to the Jio Platforms IPO, and manage 74-day chain settlements.
+            </p>
+
+            <!-- Live Market Snapshot Mini Widget -->
+            <div class="space-y-2.5 bg-obsidian-900/90 border border-slate-800/90 rounded-xl p-4">
+              <div class="text-[11px] font-mono uppercase tracking-wider text-slate-500 mb-1">Market Pulse</div>
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-300 font-medium">NIFTY 50</span>
+                <span class="font-mono font-semibold text-emerald-400 tabular-nums" id="login-nifty">24,892.45 (+0.84%)</span>
+              </div>
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-300 font-medium">SENSEX</span>
+                <span class="font-mono font-semibold text-emerald-400 tabular-nums" id="login-sensex">81,745.10 (+0.79%)</span>
+              </div>
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-300 font-medium">BTC / INR</span>
+                <span class="font-mono font-semibold text-emerald-400 tabular-nums" id="login-btc">₹78,45,200 (+2.14%)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+            <span>Browser local storage (not secure)</span>
+            <button type="button" onclick="resetDemoDatabase()" class="text-slate-400 hover:text-rose-400 underline transition">
+              Reset Demo Data
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Login Form Panel -->
+        <div class="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
+          <!-- Login Mode Tabs -->
+          <div class="grid grid-cols-2 gap-2 p-1 bg-obsidian-950 border border-slate-800 rounded-xl mb-6">
+            <button type="button" id="tab-client-login" onclick="switchLoginMode('client')" class="py-2.5 px-4 rounded-lg text-sm font-semibold transition-all bg-emerald-600 text-white shadow">
+              <i class="fa-solid fa-user-tie mr-2"></i>Client Terminal
+            </button>
+            <button type="button" id="tab-admin-login" onclick="switchLoginMode('admin')" class="py-2.5 px-4 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-white">
+              <i class="fa-solid fa-user-shield mr-2"></i>Admin Control
+            </button>
+          </div>
+
+          <form id="login-form" onsubmit="handleLoginSubmit(event)" class="space-y-5">
+            <div>
+              <label id="login-id-label" for="login-id" class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                Client ID / Username
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                  <i class="fa-solid fa-id-badge"></i>
+                </span>
+                <input id="login-id" type="text" required autocomplete="off" placeholder="e.g. CLT-797555"
+                  class="w-full pl-10 pr-4 py-3 bg-obsidian-950 border border-slate-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-xl text-sm font-mono text-white placeholder-slate-600 outline-none transition" />
+              </div>
+            </div>
+
+            <div>
+              <label for="login-pass" class="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                Security Password
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                  <i class="fa-solid fa-lock"></i>
+                </span>
+                <input id="login-pass" type="password" required placeholder="••••••••"
+                  class="w-full pl-10 pr-10 py-3 bg-obsidian-950 border border-slate-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-xl text-sm font-mono text-white placeholder-slate-600 outline-none transition" />
+                <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300">
+                  <i id="pass-eye-icon" class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div id="login-error-box" class="hidden p-3 rounded-xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span id="login-error-text">Invalid credentials.</span>
+            </div>
+
+            <button type="submit" id="login-submit-btn" class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-semibold text-sm shadow-lg shadow-emerald-950/50 transition flex items-center justify-center gap-2">
+              <span>Authenticate & Launch Terminal</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <!-- Quick-Fill Credential Helper Drawer Trigger -->
+          <div class="mt-6 pt-5 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+            <span class="text-xs text-slate-400">Testing accounts? Use 1-click auto-fill:</span>
+            <button type="button" onclick="openModal('credentials-modal')" class="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-emerald-400 transition flex items-center gap-2">
+              <i class="fa-solid fa-key"></i>
+              <span>View 14 Client & Admin Logins</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="py-4 px-6 text-center text-xs text-slate-600 border-t border-slate-900">
+      WealthCore Demo Simulation Portal • All prices & balances operate in local sandbox storage.
+    </footer>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 2: CLIENT TRADING & WEALTH TERMINAL                              -->
+  <!-- ===================================================================== -->
+  <div id="client-view" class="hidden min-h-screen flex flex-col">
+    <!-- Live Scrolling Market Ticker Bar -->
+    <div class="bg-obsidian-950 border-b border-slate-800/90 overflow-hidden py-1.5 select-none">
+      <div id="live-ticker-track" class="ticker-track flex items-center gap-8 text-xs font-mono"></div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-30 bg-obsidian-900/95 backdrop-blur-md border-b border-slate-800 px-4 sm:px-6 py-3">
+      <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+        <!-- Brand & Paper Trading Badge -->
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow">
+            <i class="fa-solid fa-chart-line text-white text-sm"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-base text-white tracking-tight">WEALTH<span class="text-emerald-400">CORE</span></span>
+              <span class="px-2 py-0.5 text-[10px] font-mono font-semibold uppercase rounded bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                Paper Trading Live
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-mono" id="header-client-meta">CLT-000000 • Client</p>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex items-center gap-1.5 overflow-x-auto max-w-full py-1">
+          <button onclick="switchClientTab('overview')" data-ctab="overview" class="client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition whitespace-nowrap">
+            <i class="fa-solid fa-gauge-high mr-1.5"></i>Dashboard
+          </button>
+          <button onclick="switchClientTab('chain')" data-ctab="chain" class="client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+            <i class="fa-solid fa-diagram-project mr-1.5 text-amber-400"></i>Client Chain & Return
+          </button>
+          <button onclick="switchClientTab('terminal')" data-ctab="terminal" class="client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+            <i class="fa-solid fa-arrow-trend-up mr-1.5"></i>Simulated Market & Trade
+          </button>
+          <button onclick="switchClientTab('ipo')" data-ctab="ipo" class="client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+            <i class="fa-solid fa-rocket mr-1.5 text-emerald-400"></i>Jio IPO Desk
+          </button>
+          <button onclick="switchClientTab('withdrawal')" data-ctab="withdrawal" class="client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+            <i class="fa-solid fa-building-columns mr-1.5 text-sky-400"></i>74-Day Withdrawal
+          </button>
+          <button onclick="switchClientTab('info')" data-ctab="info" class="client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+            <i class="fa-solid fa-circle-info mr-1.5 text-purple-400"></i>Information & Policies
+          </button>
+          <button onclick="switchClientTab('ledger')" data-ctab="ledger" class="client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap">
+            <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>Ledger & UTR
+          </button>
+        </nav>
+
+        <!-- Right Quick Actions & Logout -->
+        <div class="flex items-center gap-2">
+          <button onclick="openModal('deposit-modal')" class="px-3 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-semibold transition">
+            <i class="fa-solid fa-plus mr-1"></i>Deposit UTR
+          </button>
+          <button onclick="switchClientTab('withdrawal')" class="px-3 py-2 rounded-lg bg-sky-600/20 hover:bg-sky-600/30 border border-sky-500/40 text-sky-300 text-xs font-semibold transition">
+            <i class="fa-solid fa-clock mr-1"></i>74d Payout
+          </button>
+          <button onclick="logout()" title="Sign Out" class="p-2 rounded-lg bg-rose-950/50 hover:bg-rose-900/60 border border-rose-800/60 text-rose-300 text-xs transition">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Client Workspace -->
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 sm:p-6 space-y-6">
+
+      <!-- 6 CORE KPI CARDS -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+            <span>Available Balance</span>
+            <i class="fa-solid fa-wallet text-emerald-400"></i>
+          </div>
+          <div id="kpi-balance" class="text-lg sm:text-xl font-bold font-mono text-white tabular-nums truncate">₹0</div>
+          <div class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+            <i class="fa-solid fa-circle-check text-[9px]"></i> Liquid Margin Ready
+          </div>
+        </div>
+
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+            <span>Total Investment</span>
+            <i class="fa-solid fa-briefcase text-sky-400"></i>
+          </div>
+          <div id="kpi-invested" class="text-lg sm:text-xl font-bold font-mono text-white tabular-nums truncate">₹0</div>
+          <div class="text-[11px] text-slate-400 mt-1">Deployed Capital</div>
+        </div>
+
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+            <span>Pending Amount</span>
+            <i class="fa-solid fa-hourglass-half text-amber-400"></i>
+          </div>
+          <div id="kpi-pending" class="text-lg sm:text-xl font-bold font-mono text-amber-400 tabular-nums truncate">₹0</div>
+          <div class="text-[11px] text-slate-400 mt-1">74-Day & IPO Hold</div>
+        </div>
+
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+            <span>Simulated Profit & Loss</span>
+            <i class="fa-solid fa-chart-pie text-emerald-400"></i>
+          </div>
+          <div id="kpi-pnl" class="text-lg sm:text-xl font-bold font-mono text-emerald-400 tabular-nums truncate">+₹0</div>
+          <div id="kpi-pnl-pct" class="text-[11px] font-mono text-emerald-400 mt-1">+0.00% Demo P&L</div>
+        </div>
+
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+            <span>Shares Owned</span>
+            <i class="fa-solid fa-layer-group text-purple-400"></i>
+          </div>
+          <div id="kpi-shares" class="text-lg sm:text-xl font-bold font-mono text-white tabular-nums">0</div>
+          <div class="text-[11px] text-slate-400 mt-1">Equity & Crypto Units</div>
+        </div>
+
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+            <span>Next Shares Allocation</span>
+            <i class="fa-solid fa-calendar-check text-teal-400"></i>
+          </div>
+          <div id="kpi-next-alloc" class="text-sm sm:text-base font-bold font-mono text-teal-300 truncate">Jio IPO Tranche</div>
+          <div id="kpi-next-alloc-sub" class="text-[11px] text-slate-400 mt-1 truncate">74-Day Clearing Window</div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- SUB-TAB: CHAIN OF CLIENTS & BALANCE SECTION                       -->
+      <!-- ================================================================= -->
+      <div id="ctab-chain" class="hidden space-y-6">
+        <div class="bg-gradient-to-r from-obsidian-900 via-slate-900 to-obsidian-900 border border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-mono mb-2">
+              <i class="fa-solid fa-link"></i> SIMULATED CLIENT NETWORK LEDGER
+            </div>
+            <h2 class="text-xl font-bold text-white">Chain of Clients & Return Settlement Balance</h2>
+            <p class="text-xs text-slate-400 mt-1">
+              Standard Base Return Balance per Account: <span class="text-white font-mono font-bold">₹2,50,00,000</span> • Policy Rule: <span class="text-rose-400 font-semibold">75% Demo Adjustment Deduction (-₹1,87,50,000)</span> / <span class="text-emerald-400 font-semibold">25% Demo Calculation (₹62,50,000)</span>.
+            </p>
+          </div>
+          <div class="flex items-center gap-3 font-mono text-xs">
+            <div class="bg-obsidian-950 border border-emerald-800/50 rounded-xl px-4 py-2.5">
+              <div class="text-slate-400 text-[10px]">CONTINUE NODES</div>
+              <div id="chain-active-count" class="text-emerald-400 font-bold text-base">7 Active</div>
+            </div>
+            <div class="bg-obsidian-950 border border-rose-800/50 rounded-xl px-4 py-2.5">
+              <div class="text-slate-400 text-[10px]">BREAK / DEAD NODES</div>
+              <div id="chain-break-count" class="text-rose-400 font-bold text-base">7 Deactivated</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Column 1: Continue / Active Clients Chain -->
+          <div class="bg-obsidian-900 border border-emerald-800/40 rounded-2xl overflow-hidden flex flex-col">
+            <div class="p-4 sm:p-5 bg-emerald-950/25 border-b border-slate-800 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <div>
+                  <h3 class="font-bold text-white text-sm">Continue / Active Client Chain</h3>
+                  <p class="text-[11px] text-emerald-300/80">Zayn, Guru, Ranoji, Tanveer, Dhanush, Samynk, Abdul Jafar</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono text-[11px] font-bold">
+                CONTINUE
+              </span>
+            </div>
+            <div id="continue-chain-list" class="p-4 space-y-3 divide-y divide-slate-800/40"></div>
+          </div>
+
+          <!-- Column 2: Break / Dead / Deactivated Clients Chain -->
+          <div class="bg-obsidian-900 border border-rose-800/40 rounded-2xl overflow-hidden flex flex-col">
+            <div class="p-4 sm:p-5 bg-rose-950/25 border-b border-slate-800 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                <div>
+                  <h3 class="font-bold text-white text-sm">Break / Dead / Deactivated Client Chain</h3>
+                  <p class="text-[11px] text-rose-300/80">Bharatha, Devraj, Vinayaka, Ranjan, Yashvantha, Nadeem, Shabana</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-300 font-mono text-[11px] font-bold">
+                BREAK / DEAD
+              </span>
+            </div>
+            <div id="break-chain-list" class="p-4 space-y-3 divide-y divide-slate-800/40"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SUB-TAB: REALISTIC 74-DAY WITHDRAWAL & SETTLEMENT GATEWAY         -->
+      <!-- ================================================================= -->
+      <div id="ctab-withdrawal" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left 7 Cols: Live 74-Day Clearing Timeline with Spinning Loader -->
+          <div class="lg:col-span-7 bg-obsidian-900 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center relative">
+                  <i class="fa-solid fa-circle-notch fa-spin text-amber-400 text-xl"></i>
+                  <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-amber-400 animate-ping"></span>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-white">74-Day Demo Settlement Cycle</h2>
+                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold">PROCESSING</span>
+                  </div>
+                  <p class="text-xs text-slate-400">Mandatory illustrative review (not a regulatory process) & 75% Demo Adjustment-Adjusted Payout Window</p>
+                </div>
+              </div>
+              <div class="text-right font-mono">
+                <div class="text-xs text-slate-400">Current Clearing Day</div>
+                <div id="settlement-day-counter" class="text-lg font-bold text-amber-400">Day 12 / 74 Days</div>
+              </div>
+            </div>
+
+            <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-4 space-y-2.5">
+              <div class="flex items-center justify-between text-xs font-mono">
+                <span class="text-slate-300 flex items-center gap-2">
+                  <i class="fa-solid fa-spinner fa-spin text-emerald-400"></i>
+                  <span id="settlement-status-text">Stage 1 Active: 75% Demo Adjustment Deduction & 25% Demo Calculation Verification</span>
+                </span>
+                <span id="settlement-pct-label" class="font-bold text-emerald-400">16.2%</span>
+              </div>
+              <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                <div id="settlement-progress-bar" class="h-full rounded-full bg-gradient-to-r from-amber-500 via-emerald-500 to-teal-400 transition-all duration-700" style="width: 16.2%"></div>
+              </div>
+              <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                <span>Day 1: Claim Initiated</span>
+                <span>Day 37: Mid-Cycle Escrow Audit</span>
+                <span>Day 74: Final Bank simulated payout Credit</span>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="p-3.5 rounded-xl bg-obsidian-950 border border-emerald-500/40 flex items-start gap-3">
+                <div class="mt-0.5 text-emerald-400"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between text-xs font-bold text-white">
+                    <span>Phase 1 (Days 1 – 18): Policy Audit & 75%/25% Loss Adjustment</span>
+                    <span class="font-mono text-[10px] text-emerald-400">IN PROGRESS</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Verifying Base Balance (₹2,50,00,000), applying 75% demo adjustment charge (-₹1,87,50,000), and locking 25% net return (₹62,50,000).</p>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-obsidian-950 border border-slate-800 flex items-start gap-3 opacity-85">
+                <div class="mt-0.5 text-amber-400"><i class="fa-regular fa-clock"></i></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between text-xs font-bold text-slate-200">
+                    <span>Phase 2 (Days 19 – 42): Chain Node & Deactivation Reconciliation</span>
+                    <span class="font-mono text-[10px] text-slate-500">QUEUED</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Cross-checking Continue vs. Break/Deactivated account history and clearing broker margin liens.</p>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-obsidian-950 border border-slate-800 flex items-start gap-3 opacity-75">
+                <div class="mt-0.5 text-slate-500"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+                    <span>Phase 3 (Days 43 – 62): TDS, Penalty & Compliance Clearance</span>
+                    <span class="font-mono text-[10px] text-slate-500">SCHEDULED</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Generating institutional tax certificate and regulatory payout release authorization.</p>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-obsidian-950 border border-slate-800 flex items-start gap-3 opacity-75">
+                <div class="mt-0.5 text-slate-500"><i class="fa-solid fa-building-columns"></i></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+                    <span>Phase 4 (Days 63 – 74): Final Simulated payout status update</span>
+                    <span class="font-mono text-[10px] text-slate-500">DAY 74 RELEASE</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Direct settlement to verified beneficiary bank account with 16-digit UTR confirmation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right 5 Cols: Realistic Demo Bank Withdrawal Form -->
+          <div class="lg:col-span-5 bg-obsidian-900 border border-slate-800 rounded-2xl p-5 sm:p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-bold text-white text-base">Simulated Payout Request</h3>
+                <p class="text-xs text-slate-400">Initiate a 74-day cycle withdrawal to your linked bank account</p>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-[10px]">
+                <i class="fa-solid fa-lock mr-1"></i>LOCAL DEMO ONLY
+              </span>
+            </div>
+
+            <form onsubmit="handleRealisticWithdrawalSubmit(event)" class="space-y-3.5">
+              <div class="rounded-xl border border-amber-500/40 bg-amber-950/30 p-3 text-[11px] text-amber-200">
+                Simulation only. Do not enter a real account number, IFSC, Aadhaar, PAN, UPI ID or other personal information.
+                This form only changes fictional balances stored in this browser.
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">DEMO BENEFICIARY NAME</label>
+                <input id="wdr-holder" type="text" required maxlength="40" placeholder="Sample name only" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none focus:border-emerald-500" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-mono text-slate-400 mb-1">SIMULATED PAYOUT AMOUNT (₹)</label>
+                <input id="wdr-amt" type="number" min="1" step="1" value="5000" required class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none focus:border-emerald-500" />
+              </div>
+              <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-3 text-[11px] font-mono space-y-1">
+                <div class="flex justify-between text-slate-400"><span>Processing:</span><span class="text-amber-400 font-bold">Simulated only</span></div>
+                <div class="text-slate-500">No funds are transferred. No bank or payment network is connected.</div>
+              </div>
+              <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-flask"></i> Submit Demo Payout Request
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SUB-TAB: DEMO INFORMATION & POLICY GUIDELINES SECTION    -->
+      <!-- ================================================================= -->
+      <div id="ctab-info" class="hidden space-y-6">
+        <div class="bg-obsidian-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <span class="text-xs font-mono uppercase tracking-wider text-purple-400">Demo Project Documentation</span>
+            <h2 class="text-2xl font-bold text-white mt-1">Demo Information, Chain Rules & Settlement Policies</h2>
+            <p class="text-xs text-slate-400 mt-1">Complete operational disclosure for Continue vs. Break/Deactivated accounts, 75% Demo Adjustment deductions, and the 74-Day payout window.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-5 space-y-2">
+              <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                <i class="fa-solid fa-circle-nodes"></i> 1. Continue vs. Break / Deactivated Chain Structure
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                The WealthCore network tracks 14 registered institutional client nodes. <strong class="text-emerald-300">Continue Clients</strong> (Zayn, Guru, Ranoji, Tanveer, Dhanush, Samynk, Abdul Jafar) maintain active trading and margin continuity. <strong class="text-rose-300">Break / Dead / Deactivated Clients</strong> (Bharatha, Devraj, Vinayaka, Ranjan, Yashvantha, Nadeem, Shabana) have paused active market participation and are eligible for structured capital return settlement.
+              </p>
+            </div>
+
+            <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-5 space-y-2">
+              <div class="flex items-center gap-2 text-rose-400 font-bold text-sm">
+                <i class="fa-solid fa-percent"></i> 2. 75% Demo Adjustment & 25% Demo Calculation Formula
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Every account carries a standardized Return Base Balance of <strong class="text-white font-mono">₹2,50,00,000</strong>. Upon triggering the <strong class="text-white">Return</strong> button, institutional risk-sharing rules apply a <strong class="text-rose-400">75% Market Loss & Break Charge (-₹1,87,50,000)</strong>, releasing the remaining <strong class="text-emerald-400">25% Demo Calculation Payout (₹62,50,000)</strong> to the withdrawal queue.
+              </p>
+            </div>
+
+            <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-5 space-y-2">
+              <div class="flex items-center gap-2 text-amber-400 font-bold text-sm">
+                <i class="fa-solid fa-hourglass-half"></i> 3. Mandatory 74-Day Clearing & Escrow Timeline
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                All approved 25% return claims and institutional withdrawals undergo a mandatory <strong class="text-amber-300">74-Day Clearing Cycle</strong>. This period covers multi-tier ledger verification, exchange escrow liquidity release, compliance audit, and final simulated payout status.
+              </p>
+            </div>
+
+            <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-5 space-y-2">
+              <div class="flex items-center gap-2 text-sky-400 font-bold text-sm">
+                <i class="fa-solid fa-file-shield"></i> 4. UTR Verification & Audit Transparency
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Every deposit, 25% return claim, and withdrawal generates an immutable 16-digit UTR / Reference ID logged in both the Client Ledger and Master Admin Audit Trail for full reconciliation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SUB-TAB A: CLIENT OVERVIEW DASHBOARD                              -->
+      <!-- ================================================================= -->
+      <div id="ctab-overview" class="space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-8 bg-obsidian-900 border border-slate-800 rounded-2xl p-4 sm:p-6 flex flex-col">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div class="flex items-center gap-3">
+                <select id="overview-chart-asset" onchange="selectChartAsset(this.value)" class="bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2 text-sm font-semibold text-white outline-none focus:border-emerald-500"></select>
+                <div>
+                  <div id="chart-live-price" class="text-lg font-bold font-mono text-white tabular-nums">₹0.00</div>
+                  <div id="chart-live-change" class="text-xs font-mono text-emerald-400">+0.00%</div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <div class="flex bg-obsidian-950 border border-slate-800 rounded-lg p-1 text-xs font-mono">
+                  <button onclick="setChartTimeframe('1D')" data-tf="1D" class="tf-btn px-2.5 py-1 rounded bg-slate-800 text-white">1D</button>
+                  <button onclick="setChartTimeframe('1W')" data-tf="1W" class="tf-btn px-2.5 py-1 rounded text-slate-400 hover:text-white">1W</button>
+                  <button onclick="setChartTimeframe('1M')" data-tf="1M" class="tf-btn px-2.5 py-1 rounded text-slate-400 hover:text-white">1M</button>
+                  <button onclick="setChartTimeframe('1Y')" data-tf="1Y" class="tf-btn px-2.5 py-1 rounded text-slate-400 hover:text-white">1Y</button>
+                </div>
+                <div class="flex bg-obsidian-950 border border-slate-800 rounded-lg p-1 text-xs">
+                  <button onclick="setChartType('line')" data-ctype="line" class="ctype-btn px-2.5 py-1 rounded bg-emerald-600 text-white" title="Line Chart">
+                    <i class="fa-solid fa-chart-area"></i>
+                  </button>
+                  <button onclick="setChartType('candle')" data-ctype="candle" class="ctype-btn px-2.5 py-1 rounded text-slate-400 hover:text-white" title="Candlestick Chart">
+                    <i class="fa-solid fa-chart-column"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative w-full h-72 sm:h-80 bg-obsidian-950/70 border border-slate-800/80 rounded-xl overflow-hidden" id="chart-container-overview">
+              <canvas id="market-chart-canvas" class="w-full h-full block cursor-crosshair"></canvas>
+              <div id="chart-tooltip" class="hidden absolute pointer-events-none bg-slate-900/95 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono shadow-xl z-10"></div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 space-y-6">
+            <div class="bg-obsidian-900 border border-slate-800 rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                  <i class="fa-solid fa-bolt text-emerald-400"></i> Instant Order Execution
+                </h3>
+                <span class="text-[11px] font-mono text-slate-400">SIMULATED FEES</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 p-1 bg-obsidian-950 border border-slate-800 rounded-xl mb-4">
+                <button type="button" id="quick-side-buy" onclick="setOrderSide('BUY')" class="py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white transition">BUY / LONG</button>
+                <button type="button" id="quick-side-sell" onclick="setOrderSide('SELL')" class="py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">SELL / SHORT</button>
+              </div>
+
+              <form onsubmit="executeTradeOrder(event, 'quick')" class="space-y-3.5">
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1">SELECT INSTRUMENT</label>
+                  <select id="quick-trade-symbol" onchange="updateOrderEstimate('quick')" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none focus:border-emerald-500"></select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-mono text-slate-400 mb-1">ORDER TYPE</label>
+                    <select id="quick-trade-type" onchange="toggleLimitPrice('quick')" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none">
+                      <option value="MARKET">MARKET</option>
+                      <option value="LIMIT">LIMIT</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-mono text-slate-400 mb-1">QUANTITY</label>
+                    <input id="quick-trade-qty" type="number" step="any" min="0.001" value="10" required oninput="updateOrderEstimate('quick')" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none focus:border-emerald-500" />
+                  </div>
+                </div>
+
+                <div id="quick-limit-wrap" class="hidden">
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1">LIMIT PRICE (₹)</label>
+                  <input id="quick-trade-limit" type="number" step="0.05" oninput="updateOrderEstimate('quick')" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none" />
+                </div>
+
+                <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between text-xs font-mono">
+                  <span class="text-slate-400">Est. Order Value:</span>
+                  <span id="quick-order-total" class="font-bold text-white tabular-nums">₹0.00</span>
+                </div>
+
+                <button type="submit" id="quick-order-submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-wide uppercase shadow-lg transition">
+                  Place Instant BUY Order
+                </button>
+              </form>
+            </div>
+
+            <div class="bg-gradient-to-br from-emerald-950/70 via-obsidian-900 to-obsidian-900 border border-emerald-700/40 rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  SIMULATED IPO EXAMPLE
+                </span>
+                <span class="text-xs font-mono text-emerald-400">DEMO DATA</span>
+              </div>
+              <h4 class="font-bold text-white text-base mb-1">Jio Platforms Ltd. Mainboard IPO</h4>
+              <p class="text-xs text-slate-400 mb-4">Price Band: ₹1,420 – ₹1,495 • Lot Size: 10 Shares</p>
+              <button onclick="switchClientTab('ipo')" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
+                Submit Simulated IPO Request <i class="fa-solid fa-arrow-right ml-1"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-obsidian-900 border border-slate-800 rounded-2xl overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+              <i class="fa-solid fa-layer-group text-emerald-400"></i> Active Open Positions & Holdings
+            </h3>
+            <span class="text-xs font-mono text-slate-400">Illustrative valuation (not live)</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-obsidian-950/50">
+                  <th class="py-3 px-4">Instrument</th>
+                  <th class="py-3 px-4">Category</th>
+                  <th class="py-3 px-4 text-right">Qty</th>
+                  <th class="py-3 px-4 text-right">Avg Buy Price</th>
+                  <th class="py-3 px-4 text-right">Live LTP</th>
+                  <th class="py-3 px-4 text-right">Invested</th>
+                  <th class="py-3 px-4 text-right">Live P&L</th>
+                  <th class="py-3 px-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="overview-positions-tbody" class="divide-y divide-slate-800/70 text-xs font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SUB-TAB B: LIVE MARKET WATCH & FULL TRADING TERMINAL              -->
+      <!-- ================================================================= -->
+      <div id="ctab-terminal" class="hidden space-y-6">
+        <div id="market-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 bg-obsidian-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col">
+            <div class="p-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <h3 class="font-bold text-white text-sm">Simulated Market Watch</h3>
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              </div>
+              <div class="flex gap-1.5 text-xs font-mono">
+                <button onclick="filterMarketWatch('ALL')" data-mw="ALL" class="mw-filter-btn px-2.5 py-1 rounded bg-emerald-600 text-white">All</button>
+                <button onclick="filterMarketWatch('INDEX')" data-mw="INDEX" class="mw-filter-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300">Indices</button>
+                <button onclick="filterMarketWatch('STOCK')" data-mw="STOCK" class="mw-filter-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300">Indian Stocks</button>
+                <button onclick="filterMarketWatch('CRYPTO')" data-mw="CRYPTO" class="mw-filter-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300">Crypto</button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto flex-1">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-obsidian-950/60">
+                    <th class="py-3 px-4">Symbol</th>
+                    <th class="py-3 px-4">Type</th>
+                    <th class="py-3 px-4 text-right">Last Price (₹)</th>
+                    <th class="py-3 px-4 text-right">24h Change</th>
+                    <th class="py-3 px-4 text-right">Quick Trade</th>
+                  </tr>
+                </thead>
+                <tbody id="market-watch-tbody" class="divide-y divide-slate-800/70 text-xs font-mono"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-obsidian-900 border border-slate-800 rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-white text-sm">Terminal Order Ticket</h3>
+                <button type="button" onclick="resetPaperMargin()" class="text-[11px] font-mono text-amber-400 hover:underline">
+                  <i class="fa-solid fa-rotate-right mr-1"></i>Top-Up Paper Margin (+₹5L)
+                </button>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 p-1 bg-obsidian-950 border border-slate-800 rounded-xl mb-4">
+                <button type="button" id="term-side-buy" onclick="setOrderSide('BUY')" class="py-2.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition">BUY</button>
+                <button type="button" id="term-side-sell" onclick="setOrderSide('SELL')" class="py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">SELL</button>
+              </div>
+
+              <form onsubmit="executeTradeOrder(event, 'term')" class="space-y-4">
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1">ASSET / TICKER</label>
+                  <select id="term-trade-symbol" onchange="updateOrderEstimate('term')" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none"></select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-mono text-slate-400 mb-1">EXECUTION</label>
+                    <select id="term-trade-type" onchange="toggleLimitPrice('term')" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none">
+                      <option value="MARKET">MARKET</option>
+                      <option value="LIMIT">LIMIT</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-mono text-slate-400 mb-1">QUANTITY</label>
+                    <input id="term-trade-qty" type="number" step="any" min="0.001" value="5" required oninput="updateOrderEstimate('term')" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none" />
+                  </div>
+                </div>
+
+                <div id="term-limit-wrap" class="hidden">
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1">LIMIT PRICE (₹)</label>
+                  <input id="term-trade-limit" type="number" step="0.05" oninput="updateOrderEstimate('term')" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none" />
+                </div>
+
+                <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-3.5 space-y-1.5 text-xs font-mono">
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Current Market Price:</span>
+                    <span id="term-live-ltp" class="text-slate-200 tabular-nums">₹0.00</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Required Margin:</span>
+                    <span id="term-order-total" class="font-bold text-white tabular-nums">₹0.00</span>
+                  </div>
+                </div>
+
+                <button type="submit" id="term-order-submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition">
+                  Execute BUY Order
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-obsidian-900 border border-slate-800 rounded-2xl overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+            <h3 class="font-bold text-white text-sm">Executed Trade History</h3>
+            <span class="text-xs font-mono text-slate-400">Paper & Spot Settlements</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-obsidian-950/60">
+                  <th class="py-3 px-4">Order ID</th>
+                  <th class="py-3 px-4">Timestamp</th>
+                  <th class="py-3 px-4">Symbol</th>
+                  <th class="py-3 px-4">Side</th>
+                  <th class="py-3 px-4 text-right">Qty</th>
+                  <th class="py-3 px-4 text-right">Exec Price</th>
+                  <th class="py-3 px-4 text-right">Total Value</th>
+                </tr>
+              </thead>
+              <tbody id="trade-history-tbody" class="divide-y divide-slate-800/70 text-xs font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SUB-TAB C: JIO PLATFORMS IPO SIMULATION DESK                      -->
+      <!-- ================================================================= -->
+      <div id="ctab-ipo" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-6 bg-obsidian-900 border border-slate-800 rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Mainboard Equity Offering</span>
+                <h2 class="text-xl font-bold text-white mt-0.5">Jio Platforms Limited IPO</h2>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 font-bold text-lg">
+                JIO
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 bg-obsidian-950 border border-slate-800 rounded-xl p-3.5 mb-5 text-xs font-mono">
+              <div>
+                <div class="text-slate-500">Issue Price Band</div>
+                <div class="text-white font-bold mt-0.5">₹1,420 - ₹1,495</div>
+              </div>
+              <div>
+                <div class="text-slate-500">Lot Size</div>
+                <div class="text-white font-bold mt-0.5">10 Shares / Lot</div>
+              </div>
+              <div>
+                <div class="text-slate-500">Cut-Off Price</div>
+                <div class="text-emerald-400 font-bold mt-0.5">₹1,495.00</div>
+              </div>
+            </div>
+
+            <form onsubmit="submitJioIpoApplication(event)" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-mono text-slate-400 mb-1.5">INVESTOR CATEGORY</label>
+                  <select id="ipo-category" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none">
+                    <option value="RETAIL">Retail Individual (RII)</option>
+                    <option value="HNI">High Net-Worth (sHNI / bHNI)</option>
+                    <option value="QIB">Demo / Corporate</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-mono text-slate-400 mb-1.5">NUMBER OF LOTS (1 Lot = 10 Shares)</label>
+                  <input id="ipo-lots" type="number" min="1" max="5000" value="5" required oninput="updateIpoCost()" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none focus:border-emerald-500" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1.5">UPI MANDATE / BANK UTR REFERENCE ID</label>
+                <input id="ipo-utr" type="text" required placeholder="e.g. UTR629481048291" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none focus:border-emerald-500" />
+              </div>
+
+              <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                <div>
+                  <div class="text-xs text-slate-400">Total Bid Amount (Blocked in Pending)</div>
+                  <div class="text-[11px] text-slate-500 font-mono" id="ipo-shares-count">50 Shares @ ₹1,495</div>
+                </div>
+                <div id="ipo-total-cost" class="text-lg font-bold font-mono text-emerald-400 tabular-nums">₹74,750</div>
+              </div>
+
+              <button type="submit" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg transition">
+                Submit Jio IPO Bid & Block Mandate
+              </button>
+            </form>
+          </div>
+
+          <div class="lg:col-span-6 bg-obsidian-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-white text-base mb-1">Your Jio IPO Applications & Allotment Status</h3>
+              <p class="text-xs text-slate-400 mb-4">Simulate instant T+2 registrar allotment to convert pending bids into JIO shares.</p>
+
+              <div id="ipo-applications-list" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+              <span>Sample registrar label — not connected</span>
+              <span class="font-mono text-emerald-400">SIMULATED — NO PAYMENT CONNECTED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SUB-TAB D: TRANSACTION HISTORY & UTR LEDGER                       -->
+      <!-- ================================================================= -->
+      <div id="ctab-ledger" class="hidden space-y-4">
+        <div class="bg-obsidian-900 border border-slate-800 rounded-2xl overflow-hidden">
+          <div class="p-5 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="font-bold text-white text-base">Account Ledger & UTR Reference History</h3>
+              <p class="text-xs text-slate-400">Complete audit trail of deposits, 25% return claims, withdrawals, IPO mandates, and settlements.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="client-tx-filter" onchange="renderClientTransactions()" class="bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white outline-none">
+                <option value="ALL">All Transactions</option>
+                <option value="DEPOSIT">Deposits (UTR)</option>
+                <option value="WITHDRAWAL">Withdrawals & 25% Demo Calculations</option>
+                <option value="IPO">Jio IPO Bids</option>
+                <option value="TRADE">Trade Settlements</option>
+              </select>
+              <button onclick="openModal('deposit-modal')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold">
+                + Submit UTR Deposit
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-obsidian-950/60">
+                  <th class="py-3.5 px-4">Tx ID</th>
+                  <th class="py-3.5 px-4">Date & Time</th>
+                  <th class="py-3.5 px-4">Type</th>
+                  <th class="py-3.5 px-4">UTR / Reference ID</th>
+                  <th class="py-3.5 px-4 text-right">Amount (₹)</th>
+                  <th class="py-3.5 px-4 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody id="client-tx-tbody" class="divide-y divide-slate-800/70 text-xs font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- VIEW 3: ADMIN CONTROL & TREASURY DASHBOARD                            -->
+  <!-- ===================================================================== -->
+  <div id="admin-view" class="hidden min-h-screen flex flex-col">
+    <header class="sticky top-0 z-30 bg-obsidian-900/95 backdrop-blur-md border-b border-slate-800 px-4 sm:px-6 py-3.5">
+      <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-700 flex items-center justify-center shadow">
+            <i class="fa-solid fa-shield-halved text-white text-sm"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-base text-white tracking-tight">WEALTH<span class="text-amber-400">CORE</span> ADMIN</span>
+              <span class="px-2 py-0.5 text-[10px] font-mono uppercase rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                Demo Admin Control
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 font-mono">Managing 14 Sample Client Accounts (Continue & Break/Dead)</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="exportClientsCSV()" class="px-3.5 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-semibold transition flex items-center gap-1.5">
+            <i class="fa-solid fa-file-csv"></i> Export Clients CSV
+          </button>
+          <button onclick="exportTransactionsCSV()" class="px-3.5 py-2 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 border border-sky-500/40 text-sky-300 text-xs font-semibold transition flex items-center gap-1.5">
+            <i class="fa-solid fa-download"></i> Export Ledger CSV
+          </button>
+          <button onclick="logout()" class="px-3.5 py-2 rounded-xl bg-rose-950/60 hover:bg-rose-900/70 border border-rose-800 text-rose-300 text-xs font-semibold transition">
+            <i class="fa-solid fa-right-from-bracket mr-1"></i>Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 sm:p-6 space-y-6">
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4">
+          <div class="text-xs text-slate-400 mb-1">Total Client Liquid AUM</div>
+          <div id="admin-kpi-aum" class="text-xl font-bold font-mono text-white tabular-nums">₹0</div>
+          <div class="text-[11px] text-emerald-400 mt-1">Across 14 Network Accounts</div>
+        </div>
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4">
+          <div class="text-xs text-slate-400 mb-1">Total Deployed Investments</div>
+          <div id="admin-kpi-invested" class="text-xl font-bold font-mono text-sky-400 tabular-nums">₹0</div>
+          <div class="text-[11px] text-slate-400 mt-1">Equities, Crypto & IPOs</div>
+        </div>
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4">
+          <div class="text-xs text-slate-400 mb-1">Pending 74-Day / Return Claims</div>
+          <div id="admin-kpi-pending-count" class="text-xl font-bold font-mono text-amber-400 tabular-nums">0</div>
+          <div id="admin-kpi-pending-amt" class="text-[11px] text-slate-400 mt-1">₹0 Awaiting Approval</div>
+        </div>
+        <div class="bg-obsidian-900 border border-slate-800 rounded-xl p-4">
+          <div class="text-xs text-slate-400 mb-1">Total Ledger Transactions</div>
+          <div id="admin-kpi-tx-count" class="text-xl font-bold font-mono text-purple-400 tabular-nums">0</div>
+          <div class="text-[11px] text-slate-400 mt-1">Real-time Audit Trail</div>
+        </div>
+      </section>
+
+      <div class="flex gap-2 border-b border-slate-800 pb-3 overflow-x-auto">
+        <button onclick="switchAdminTab('clients')" data-atab="clients" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-amber-600 text-white transition whitespace-nowrap">
+          <i class="fa-solid fa-users-gear mr-1.5"></i>Manage 14 Clients
+        </button>
+        <button onclick="switchAdminTab('withdrawals')" data-atab="withdrawals" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-obsidian-900 text-slate-400 hover:text-white border border-slate-800 transition whitespace-nowrap">
+          <i class="fa-solid fa-money-bill-transfer mr-1.5"></i>Withdrawal & Return Approvals <span id="admin-badge-withdrawals" class="ml-1 px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">0</span>
+        </button>
+        <button onclick="switchAdminTab('transactions')" data-atab="transactions" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-obsidian-900 text-slate-400 hover:text-white border border-slate-800 transition whitespace-nowrap">
+          <i class="fa-solid fa-list-check mr-1.5"></i>Master Transaction Log
+        </button>
+      </div>
+
+      <div id="atab-clients" class="bg-obsidian-900 border border-slate-800 rounded-2xl overflow-hidden">
+        <div class="p-4 sm:p-5 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 class="font-bold text-white text-base">Client Chain Status, Return Base & Balance Control</h3>
+            <p class="text-xs text-slate-400">Click "Edit Account" on any client to toggle CONTINUE / BREAK status or edit Return Base & Balances.</p>
+          </div>
+          <div class="relative w-full sm:w-64">
+            <i class="fa-solid fa-search absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+            <input id="admin-client-search" type="text" oninput="renderAdminClientsTable()" placeholder="Search Name or CLT-ID..." class="w-full pl-9 pr-3 py-2 bg-obsidian-950 border border-slate-700 rounded-xl text-xs font-mono text-white outline-none focus:border-amber-500" />
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-obsidian-950/60">
+                <th class="py-3.5 px-4">Client ID</th>
+                <th class="py-3.5 px-4">Name</th>
+                <th class="py-3.5 px-4">Chain Status</th>
+                <th class="py-3.5 px-4">Password</th>
+                <th class="py-3.5 px-4 text-right">Available Balance</th>
+                <th class="py-3.5 px-4 text-right">Return Base (₹)</th>
+                <th class="py-3.5 px-4 text-right">Pending Amt</th>
+                <th class="py-3.5 px-4 text-right">Control</th>
+              </tr>
+            </thead>
+            <tbody id="admin-clients-tbody" class="divide-y divide-slate-800/70 text-xs font-mono"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="atab-withdrawals" class="hidden bg-obsidian-900 border border-slate-800 rounded-2xl overflow-hidden">
+        <div class="p-5 border-b border-slate-800">
+          <h3 class="font-bold text-white text-base">74-Day Withdrawal & 25% Demo Calculation Approval Queue</h3>
+          <p class="text-xs text-slate-400">Approving finalizes the payout and clears Pending Amount. Rejecting refunds the amount back to the client's Available Balance.</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-obsidian-950/60">
+                <th class="py-3.5 px-4">Request ID</th>
+                <th class="py-3.5 px-4">Client</th>
+                <th class="py-3.5 px-4">Timestamp</th>
+                <th class="py-3.5 px-4">Bank / Policy Reference</th>
+                <th class="py-3.5 px-4 text-right">Amount (₹)</th>
+                <th class="py-3.5 px-4 text-center">Status</th>
+                <th class="py-3.5 px-4 text-right">Decision</th>
+              </tr>
+            </thead>
+            <tbody id="admin-withdrawals-tbody" class="divide-y divide-slate-800/70 text-xs font-mono"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="atab-transactions" class="hidden bg-obsidian-900 border border-slate-800 rounded-2xl overflow-hidden">
+        <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+          <div>
+            <h3 class="font-bold text-white text-base">Master System Transaction Ledger</h3>
+            <p class="text-xs text-slate-400">Consolidated log of all client deposits, 25% return claims, withdrawals, trades, and admin adjustments.</p>
+          </div>
+          <button onclick="exportTransactionsCSV()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-emerald-400">
+            Download CSV
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 bg-obsidian-950/60">
+                <th class="py-3.5 px-4">Tx ID</th>
+                <th class="py-3.5 px-4">Client ID & Name</th>
+                <th class="py-3.5 px-4">Timestamp</th>
+                <th class="py-3.5 px-4">Type</th>
+                <th class="py-3.5 px-4">UTR / Details</th>
+                <th class="py-3.5 px-4 text-right">Amount (₹)</th>
+                <th class="py-3.5 px-4 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="admin-all-tx-tbody" class="divide-y divide-slate-800/70 text-xs font-mono"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODALS                                                                -->
+  <!-- ===================================================================== -->
+
+  <!-- Modal 1: Quick-Fill Demo Credentials Drawer -->
+  <div id="credentials-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-obsidian-900 border border-slate-700 rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl">
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+        <div>
+          <h3 class="font-bold text-white text-base">Pre-Configured Terminal Credentials (14 Clients + Admin)</h3>
+          <p class="text-xs text-slate-400">Click any account row below to auto-fill the login screen.</p>
+        </div>
+        <button onclick="closeModal('credentials-modal')" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-4">
+        <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">Master Admin</span>
+            <div class="text-sm font-bold text-white mt-1">Admin Control Terminal (`ADMIN` / `ADMIN129`)</div>
+          </div>
+          <button onclick="quickFillCredentials('ADMIN', 'ADMIN129', 'admin')" class="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition">
+            Fill Admin Login
+          </button>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-800 rounded-xl">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-obsidian-950 text-[11px] font-mono uppercase text-slate-400 border-b border-slate-800">
+                <th class="py-2.5 px-3">#</th>
+                <th class="py-2.5 px-3">Client Name & Chain Status</th>
+                <th class="py-2.5 px-3">Client ID</th>
+                <th class="py-2.5 px-3">Password</th>
+                <th class="py-2.5 px-3 text-right">Return Base</th>
+                <th class="py-2.5 px-3 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="credentials-list-tbody" class="divide-y divide-slate-800/70 text-xs font-mono"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Client Deposit with UTR / Reference ID -->
+  <div id="deposit-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-obsidian-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-building-columns text-emerald-400"></i> Instant Funds Deposit (UTR)
+        </h3>
+        <button onclick="closeModal('deposit-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="handleDepositSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-mono text-slate-400 mb-1">DEPOSIT AMOUNT (INR ₹)</label>
+          <input id="deposit-amount" type="number" min="100" step="100" required placeholder="e.g. 500000" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-mono text-white outline-none focus:border-emerald-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-mono text-slate-400 mb-1">PAYMENT MODE</label>
+          <select id="deposit-mode" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none">
+            <option value="simulated payout">simulated payout Demo Wire</option>
+            <option value="IMPS">IMPS Instant Transfer</option>
+            <option value="UPI">UPI Corporate Mandate</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-mono text-slate-400 mb-1">BANK UTR / REFERENCE ID</label>
+          <input id="deposit-utr" type="text" required placeholder="e.g. HDFC000948271645" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-mono text-white outline-none focus:border-emerald-500" />
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition">
+          Verify UTR & Credit Balance
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Admin Edit Client Account -->
+  <div id="admin-edit-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-obsidian-900 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="font-bold text-white text-base">Edit Client Portfolio, Status & Balances</h3>
+          <p id="edit-client-subtitle" class="text-xs font-mono text-amber-400">CLT-000000</p>
+        </div>
+        <button onclick="closeModal('admin-edit-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form onsubmit="saveAdminClientEdits(event)" class="space-y-4">
+        <input type="hidden" id="edit-client-id" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">CHAIN ACCOUNT STATUS</label>
+            <select id="edit-chain-status" class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none focus:border-amber-500">
+              <option value="CONTINUE">CONTINUE (Active)</option>
+              <option value="BREAK">BREAK / DEAD / DEACTIVATED</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">RETURN BASE BALANCE (₹)</label>
+            <input id="edit-return-base" type="number" step="any" required class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none focus:border-amber-500" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">AVAILABLE BALANCE (₹)</label>
+            <input id="edit-balance" type="number" step="any" required class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">TOTAL INVESTMENT (₹)</label>
+            <input id="edit-invested" type="number" step="any" required class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none focus:border-amber-500" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">PENDING AMOUNT (₹)</label>
+            <input id="edit-pending" type="number" step="any" required class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-mono text-slate-400 mb-1">SHARES OWNED (QTY)</label>
+            <input id="edit-shares" type="number" step="any" required class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none focus:border-amber-500" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-slate-400 mb-1">NEXT SHARES ALLOCATION NOTE</label>
+          <input id="edit-next-alloc" type="text" required class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs font-mono text-white outline-none focus:border-amber-500" />
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="closeModal('admin-edit-modal')" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold uppercase tracking-wider">
+            Save & Sync Account
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 4: 75% Demo Adjustment / 25% Demo Calculation Policy Breakdown & Scroll-Down Policy Drawer -->
+  <div id="return-policy-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-obsidian-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-5 bg-gradient-to-r from-slate-900 to-obsidian-950 border-b border-slate-800 flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="ret-modal-status-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-emerald-500/20 text-emerald-300">CONTINUE</span>
+            <span class="text-xs font-mono text-slate-400" id="ret-modal-client-id">CLT-000000</span>
+          </div>
+          <h3 class="font-bold text-white text-lg mt-1">Return Calculation & Policy Settlement — <span id="ret-modal-client-name" class="text-emerald-400">Client</span></h3>
+        </div>
+        <button onclick="closeModal('return-policy-modal')" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-5">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono">
+          <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-3.5">
+            <div class="text-[10px] text-slate-400 uppercase">Base Return Balance</div>
+            <div id="ret-base-amt" class="text-base font-bold text-white mt-1 tabular-nums">₹2,50,00,000</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">100% Principal Pool</div>
+          </div>
+
+          <div class="bg-rose-950/30 border border-rose-800/60 rounded-xl p-3.5">
+            <div class="text-[10px] text-rose-300 uppercase font-bold">75% Demo Adjustment Deduction</div>
+            <div id="ret-loss-amt" class="text-base font-bold text-rose-400 mt-1 tabular-nums">-₹1,87,50,000</div>
+            <div class="text-[10px] text-rose-300/70 mt-0.5">Market Loss & Break Charge</div>
+          </div>
+
+          <div class="bg-emerald-950/30 border border-emerald-700/60 rounded-xl p-3.5">
+            <div class="text-[10px] text-emerald-300 uppercase font-bold">25% Demo Calculation Payout</div>
+            <div id="ret-net-amt" class="text-base font-bold text-emerald-400 mt-1 tabular-nums">₹62,50,000</div>
+            <div class="text-[10px] text-emerald-300/70 mt-0.5">Eligible After 74 Days</div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between bg-obsidian-950 border border-slate-800 rounded-xl px-4 py-2.5">
+          <span class="text-xs text-slate-300 font-medium">Mandatory Policy Review Required Before Claim</span>
+          <button type="button" onclick="scrollPoliciesDown()" class="px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow">
+            <span>Scroll Down All Policies</span>
+            <i class="fa-solid fa-angles-down animate-bounce"></i>
+          </button>
+        </div>
+
+        <div id="policies-scroll-box" class="h-52 overflow-y-auto bg-obsidian-950 border border-slate-800 rounded-xl p-4 space-y-4 text-xs text-slate-300 leading-relaxed scroll-smooth">
+          <div class="border-b border-slate-800 pb-2">
+            <h4 class="font-bold text-white uppercase font-mono text-[11px] text-amber-400">Clause 1: 75% Demo Adjustment Deduction & Capital Adjustment Policy</h4>
+            <p class="mt-1 text-slate-400">
+              Under WealthCore Demo Risk Clause 14(B), every client return balance of <strong class="text-white">₹2,50,00,000</strong> is subject to a mandatory <strong class="text-rose-400">75% Market Drawdown & Break Loss Charge (-₹1,87,50,000)</strong>. This deduction covers derivative margin shortfall, liquidity exit penalties, and chain-break settlement fees.
+            </p>
+          </div>
+
+          <div class="border-b border-slate-800 pb-2">
+            <h4 class="font-bold text-white uppercase font-mono text-[11px] text-emerald-400">Clause 2: 25% Demo Calculation Settlement Guarantee</h4>
+            <p class="mt-1 text-slate-400">
+              Following the 75% demo adjustment deduction, the account holder is entitled to claim the remaining <strong class="text-emerald-400">25% Demo Calculation Balance (₹62,50,000)</strong>. Both <strong class="text-white">Continue</strong> and <strong class="text-white">Break / Deactivated</strong> accounts follow this exact 75% Demo Adjustment / 25% Demo Calculation formula.
+            </p>
+          </div>
+
+          <div class="border-b border-slate-800 pb-2">
+            <h4 class="font-bold text-white uppercase font-mono text-[11px] text-sky-400">Clause 3: 74-Day Demo Clearing & Withdrawal Cycle</h4>
+            <p class="mt-1 text-slate-400">
+              Once the 25% Demo Calculation button is confirmed, the net payout of <strong class="text-white">₹62,50,000</strong> enters the <strong class="text-amber-300">74-Day Clearing & Escrow Settlement Pipeline</strong>. Funds remain visible under Pending Settlement with live milestone tracking until Day 74 simulated payout bank credit.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-bold text-white uppercase font-mono text-[11px] text-purple-400">Clause 4: Deactivated / Dead Node Finality</h4>
+            <p class="mt-1 text-slate-400">
+              For Break / Dead / Deactivated clients (Bharatha, Devraj, Vinayaka, Ranjan, Yashvantha, Nadeem, Shabana), initiating the 25% Demo Calculation locks the final settlement claim and generates a permanent UTR audit receipt.
+            </p>
+          </div>
+        </div>
+
+        <label class="flex items-start gap-2.5 cursor-pointer select-none bg-slate-900/80 border border-slate-800 p-3 rounded-xl">
+          <input id="policy-agree-checkbox" type="checkbox" class="mt-0.5 rounded border-slate-600 text-emerald-600 focus:ring-emerald-500" />
+          <span class="text-xs text-slate-300">
+            I have scrolled through and accepted all policies, including the <strong class="text-rose-400">75% Demo Adjustment (-₹1,87,50,000)</strong>, <strong class="text-emerald-400">25% Demo Calculation (₹62,50,000)</strong>, and the <strong class="text-amber-400">74-Day Settlement Timeline</strong>.
+          </span>
+        </label>
+
+        <div class="flex gap-3">
+          <button type="button" onclick="closeModal('return-policy-modal')" class="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">
+            Cancel
+          </button>
+          <button type="button" onclick="confirmTwentyFivePercentReturn()" class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider shadow-lg transition">
+            Claim 25% Demo Calculation (₹62,50,000)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT APPLICATION LOGIC & STATE ENGINE                           -->
+  <!-- ===================================================================== -->
+  <script>
+    const STORAGE_KEY = 'wealthcore_terminal_state_v3';
+
+    const INITIAL_CLIENTS = [
+      // 7 CONTINUE / ACTIVE CLIENTS
+      { id: 'CLT-797555',     pass: 'ZAI129', name: 'Zayn',        chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 8500000, pending: 0, shares: 18500, nextAllocation: 'Jio Platforms Pre-IPO (5,000 Sh)', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-34781926',   pass: 'GUR129', name: 'Guru',        chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 6200000, pending: 0, shares: 14200, nextAllocation: 'Jio Platforms Anchor Lot', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-808835',     pass: 'RAN129', name: 'Ranoji',      chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 7400000, pending: 0, shares: 16100, nextAllocation: 'Reliance & Jio Demo Lot', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-TANVEERTAN', pass: 'TAN129', name: 'Tanveer',     chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 5100000, pending: 0, shares: 11800, nextAllocation: 'Jio IPO QIB Allotment', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-62845017',   pass: 'DHA129', name: 'Dhanush',     chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 4800000, pending: 0, shares: 10900, nextAllocation: 'Jio sHNI Tranche #1', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-45871293',   pass: 'SAM129', name: 'Samynk',      chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 9100000, pending: 0, shares: 21400, nextAllocation: 'Jio Platforms Pre-IPO Tranche', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-11223344',   pass: 'ABD129', name: 'Abdul Jafar', chainStatus: 'CONTINUE', returnBase: 25000000, balance: 25000000, invested: 6900000, pending: 0, shares: 15300, nextAllocation: 'Jio Demo Allocation', positions: [], trades: [], ipoApps: [] },
+
+      // 7 BREAK / DEAD / DEACTIVATED CLIENTS
+      { id: 'CLT-BHARTH',     pass: 'BHA129', name: 'Bharatha',    chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 3200000, pending: 0, shares: 7400,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-DEVRAJ',     pass: 'DEV129', name: 'Devraj',      chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 2900000, pending: 0, shares: 6800,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-73456218',   pass: 'VIN129', name: 'Vinayaka',    chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 4100000, pending: 0, shares: 9200,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-55667788',   pass: 'RNJ129', name: 'Ranjan',      chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 2400000, pending: 0, shares: 5600,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-YASHVANTHA', pass: 'YAS129', name: 'Yashvantha',  chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 3750000, pending: 0, shares: 8300,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-91274051',   pass: 'NAD129', name: 'Nadeem',      chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 4500000, pending: 0, shares: 10100, nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] },
+      { id: 'CLT-SHABANA',    pass: 'SHA129', name: 'Shabana',     chainStatus: 'BREAK',    returnBase: 25000000, balance: 25000000, invested: 1950000, pending: 0, shares: 4200,  nextAllocation: '25% Demo Calculation Settlement Queue', positions: [], trades: [], ipoApps: [] }
+    ];
+
+    const MARKET_ASSETS = [
+      { symbol: 'NIFTY 50',   name: 'NSE Nifty 50 Index',     category: 'INDEX',  price: 24892.45, prevClose: 24685.10, changePct: 0.84 },
+      { symbol: 'SENSEX',     name: 'BSE Sensex 30 Index',    category: 'INDEX',  price: 81745.10, prevClose: 81104.35, changePct: 0.79 },
+      { symbol: 'RELIANCE',   name: 'Reliance Industries Ltd',category: 'STOCK',  price: 3042.80,  prevClose: 2998.50,  changePct: 1.48 },
+      { symbol: 'TCS',        name: 'Tata Consultancy Svcs',  category: 'STOCK',  price: 4185.25,  prevClose: 4210.00,  changePct: -0.59 },
+      { symbol: 'HDFCBANK',   name: 'HDFC Bank Limited',      category: 'STOCK',  price: 1748.60,  prevClose: 1729.40,  changePct: 1.11 },
+      { symbol: 'INFY',       name: 'Infosys Limited',        category: 'STOCK',  price: 1894.15,  prevClose: 1906.80,  changePct: -0.66 },
+      { symbol: 'TATAMOTORS', name: 'Tata Motors Limited',    category: 'STOCK',  price: 986.40,   prevClose: 968.20,   changePct: 1.88 },
+      { symbol: 'BHARTIARTL', name: 'Bharti Airtel Limited',  category: 'STOCK',  price: 1642.90,  prevClose: 1625.00,  changePct: 1.10 },
+      { symbol: 'BTC/INR',    name: 'Bitcoin Spot INR',       category: 'CRYPTO', price: 7845200,  prevClose: 7680800,  changePct: 2.14 },
+      { symbol: 'ETH/INR',    name: 'Ethereum Spot INR',      category: 'CRYPTO', price: 294650,   prevClose: 298100,   changePct: -1.16 }
+    ];
+
+    let appState = {
+      clients: [],
+      transactions: [],
+      session: null
+    };
+
+    let uiState = {
+      loginMode: 'client',
+      selectedChartSymbol: 'NIFTY 50',
+      chartTimeframe: '1D',
+      chartType: 'line',
+      chartHistory: {},
+      orderSide: 'BUY',
+      marketFilter: 'ALL',
+      activeReturnClientId: null
+    };
+
+    function formatINR(amount, compact = false) {
+      const num = Number(amount) || 0;
+      if (compact && Math.abs(num) >= 10000000) {
+        return '₹' + (num / 10000000).toFixed(2) + ' Cr';
+      }
+      return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: num % 1 === 0 ? 0 : 2
+      }).format(num);
+    }
+
+    function initApp() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          appState = JSON.parse(saved);
+        } catch (e) {
+          seedDefaultState();
+        }
+      } else {
+        seedDefaultState();
+      }
+
+      MARKET_ASSETS.forEach(asset => {
+        uiState.chartHistory[asset.symbol] = generateChartSeries(asset.price, 48);
+      });
+
+      populateCredentialsModal();
+      populateAssetSelectors();
+      renderMarketCards();
+      renderMarketWatch();
+      renderTickerBar();
+
+      if (appState.session) {
+        if (appState.session.role === 'admin') {
+          showView('admin');
+          renderAdminDashboard();
+        } else if (appState.session.role === 'client') {
+          const client = getCurrentClient();
+          if (client) {
+            showView('client');
+            renderClientDashboard();
+          } else {
+            logout();
+          }
+        }
+      } else {
+        showView('auth');
+      }
+
+      setInterval(simulateMarketTick, 2000);
+      window.addEventListener('resize', drawInteractiveChart);
+    }
+
+    function seedDefaultState() {
+      const clonedClients = JSON.parse(JSON.stringify(INITIAL_CLIENTS));
+      clonedClients.forEach((c, idx) => {
+        const starterAsset = idx % 2 === 0 ? MARKET_ASSETS[2] : MARKET_ASSETS[4];
+        const qty = 25;
+        const avgPrice = Number((starterAsset.price * 0.965).toFixed(2));
+        c.positions.push({
+          symbol: starterAsset.symbol,
+          category: starterAsset.category,
+          qty: qty,
+          avgPrice: avgPrice
+        });
+        c.trades.push({
+          orderId: 'ORD-' + (100400 + idx),
+          timestamp: '2026-11-20 14:22:10',
+          symbol: starterAsset.symbol,
+          side: 'BUY',
+          qty: qty,
+          price: avgPrice,
+          total: qty * avgPrice
+        });
+      });
+
+      const starterTxs = [
+        {
+          txId: 'TXN-908411',
+          clientId: 'CLT-797555',
+          clientName: 'Zayn',
+          timestamp: '2026-11-20 10:15:00',
+          type: 'DEPOSIT',
+          reference: 'UTR492018472910 (simulated payout)',
+          amount: 25000000,
+          status: 'COMPLETED'
+        },
+        {
+          txId: 'TXN-908412',
+          clientId: 'CLT-34781926',
+          clientName: 'Guru',
+          timestamp: '2026-11-20 11:40:22',
+          type: 'IPO',
+          reference: 'JIO-IPO-UPI-884120',
+          amount: 149500,
+          status: 'ALLOCATED'
+        }
+      ];
+
+      appState = {
+        clients: clonedClients,
+        transactions: starterTxs,
+        session: null
+      };
+      saveState();
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    }
+
+    function resetDemoDatabase() {
+      localStorage.removeItem(STORAGE_KEY);
+      seedDefaultState();
+      populateCredentialsModal();
+      showToast('Demo database reset to initial 14 client chain balances.', 'info');
+    }
+
+    function getCurrentClient() {
+      if (!appState.session || appState.session.role !== 'client') return null;
+      return appState.clients.find(c => c.id === appState.session.clientId) || null;
+    }
+
+    function showView(viewName) {
+      document.getElementById('auth-view').classList.toggle('hidden', viewName !== 'auth');
+      document.getElementById('client-view').classList.toggle('hidden', viewName !== 'client');
+      document.getElementById('admin-view').classList.toggle('hidden', viewName !== 'admin');
+      if (viewName === 'client') {
+        setTimeout(drawInteractiveChart, 30);
+      }
+    }
+
+    function switchLoginMode(mode) {
+      uiState.loginMode = mode;
+      const clientTab = document.getElementById('tab-client-login');
+      const adminTab = document.getElementById('tab-admin-login');
+      const idLabel = document.getElementById('login-id-label');
+      const idInput = document.getElementById('login-id');
+      const submitBtn = document.getElementById('login-submit-btn');
+
+      document.getElementById('login-error-box').classList.add('hidden');
+
+      if (mode === 'client') {
+        clientTab.className = 'py-2.5 px-4 rounded-lg text-sm font-semibold transition-all bg-emerald-600 text-white shadow';
+        adminTab.className = 'py-2.5 px-4 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-white';
+        idLabel.textContent = 'Client ID / Username';
+        idInput.placeholder = 'e.g. CLT-797555';
+        submitBtn.className = 'w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-semibold text-sm shadow-lg shadow-emerald-950/50 transition flex items-center justify-center gap-2';
+      } else {
+        adminTab.className = 'py-2.5 px-4 rounded-lg text-sm font-semibold transition-all bg-amber-600 text-white shadow';
+        clientTab.className = 'py-2.5 px-4 rounded-lg text-sm font-semibold transition-all text-slate-400 hover:text-white';
+        idLabel.textContent = 'Admin Username';
+        idInput.placeholder = 'ADMIN';
+        submitBtn.className = 'w-full py-3.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 active:scale-[0.99] text-white font-semibold text-sm shadow-lg shadow-amber-950/50 transition flex items-center justify-center gap-2';
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById('login-pass');
+      const icon = document.getElementById('pass-eye-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-solid fa-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'fa-solid fa-eye';
+      }
+    }
+
+    function populateCredentialsModal() {
+      const tbody = document.getElementById('credentials-list-tbody');
+      tbody.innerHTML = appState.clients.map((c, index) => {
+        const isCont = c.chainStatus === 'CONTINUE';
+        return `
+        <tr class="hover:bg-slate-800/50 transition">
+          <td class="py-2.5 px-3 text-slate-500">${index + 1}</td>
+          <td class="py-2.5 px-3 font-sans font-semibold text-white">
+            ${c.name}
+            <span class="ml-1.5 px-1.5 py-0.5 rounded text-[9px] font-mono ${isCont ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'}">
+              ${isCont ? 'CONTINUE' : 'BREAK/DEAD'}
+            </span>
+          </td>
+          <td class="py-2.5 px-3 text-emerald-400">${c.id}</td>
+          <td class="py-2.5 px-3 text-slate-300">${c.pass}</td>
+          <td class="py-2.5 px-3 text-right text-slate-200 tabular-nums">${formatINR(c.returnBase || 25000000)}</td>
+          <td class="py-2.5 px-3 text-right">
+            <button type="button" onclick="quickFillCredentials('${c.id}', '${c.pass}', 'client')" class="px-2.5 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 transition">
+              Use Login
+            </button>
+          </td>
+        </tr>
+      `;
+      }).join('');
+    }
+
+    function quickFillCredentials(id, pass, mode) {
+      switchLoginMode(mode);
+      document.getElementById('login-id').value = id;
+      document.getElementById('login-pass').value = pass;
+      document.getElementById('login-error-box').classList.add('hidden');
+      closeModal('credentials-modal');
+      showToast(`Auto-filled credentials for ${id}`, 'info');
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const idVal = document.getElementById('login-id').value.trim().toUpperCase();
+      const passVal = document.getElementById('login-pass').value.trim();
+      const errorBox = document.getElementById('login-error-box');
+      const errorText = document.getElementById('login-error-text');
+
+      if (uiState.loginMode === 'admin') {
+        if (idVal === 'ADMIN' && passVal === 'ADMIN129') {
+          errorBox.classList.add('hidden');
+          appState.session = { role: 'admin', clientId: null };
+          saveState();
+          showView('admin');
+          renderAdminDashboard();
+          showToast('Authenticated as Master Admin.', 'success');
+        } else {
+          errorText.textContent = 'Invalid Admin credentials. Use ADMIN / ADMIN129.';
+          errorBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      const matchedClient = appState.clients.find(
+        c => c.id.toUpperCase() === idVal && c.pass === passVal
+      );
+
+      if (matchedClient) {
+        errorBox.classList.add('hidden');
+        appState.session = { role: 'client', clientId: matchedClient.id };
+        saveState();
+        showView('client');
+        renderClientDashboard();
+        showToast(`Welcome back, ${matchedClient.name} (${matchedClient.id}).`, 'success');
+      } else {
+        errorText.textContent = 'Invalid Client ID or Password. Check the 14-client credential list.';
+        errorBox.classList.remove('hidden');
+      }
+    }
+
+    function logout() {
+      appState.session = null;
+      saveState();
+      document.getElementById('login-pass').value = '';
+      showView('auth');
+      showToast('Session terminated safely.', 'info');
+    }
+
+    function switchClientTab(tabName) {
+      ['overview', 'chain', 'terminal', 'ipo', 'withdrawal', 'info', 'ledger'].forEach(t => {
+        const el = document.getElementById(`ctab-${t}`);
+        if (el) el.classList.toggle('hidden', t !== tabName);
+      });
+
+      document.querySelectorAll('.client-nav-btn').forEach(btn => {
+        const isActive = btn.dataset.ctab === tabName;
+        btn.className = isActive
+          ? 'client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition whitespace-nowrap'
+          : 'client-nav-btn px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition whitespace-nowrap';
+      });
+
+      if (tabName === 'overview') {
+        setTimeout(drawInteractiveChart, 20);
+      } else if (tabName === 'chain') {
+        renderClientChainSection();
+      } else if (tabName === 'withdrawal') {
+        const c = getCurrentClient();
+        if (c && document.getElementById('wdr-holder') && !document.getElementById('wdr-holder').value) {
+          document.getElementById('wdr-holder').value = c.name;
+        }
+      } else if (tabName === 'ipo') {
+        updateIpoCost();
+        renderClientIpoList();
+      } else if (tabName === 'ledger') {
+        renderClientTransactions();
+      }
+    }
+
+    function renderClientDashboard() {
+      const client = getCurrentClient();
+      if (!client) return;
+
+      document.getElementById('header-client-meta').textContent = `${client.id} • ${client.name} (${client.chainStatus || 'CONTINUE'})`;
+
+      let livePnl = 0;
+      let totalPosCost = 0;
+      (client.positions || []).forEach(pos => {
+        const asset = MARKET_ASSETS.find(a => a.symbol === pos.symbol);
+        const ltp = asset ? asset.price : pos.avgPrice;
+        livePnl += (ltp - pos.avgPrice) * pos.qty;
+        totalPosCost += pos.avgPrice * pos.qty;
+      });
+
+      const pnlPct = totalPosCost > 0 ? (livePnl / totalPosCost) * 100 : 0;
+
+      document.getElementById('kpi-balance').textContent = formatINR(client.balance);
+      document.getElementById('kpi-invested').textContent = formatINR(client.invested);
+      document.getElementById('kpi-pending').textContent = formatINR(client.pending);
+
+      const pnlEl = document.getElementById('kpi-pnl');
+      const pnlPctEl = document.getElementById('kpi-pnl-pct');
+      const isUp = livePnl >= 0;
+      pnlEl.textContent = `${isUp ? '+' : ''}${formatINR(livePnl)}`;
+      pnlEl.className = `text-lg sm:text-xl font-bold font-mono tabular-nums truncate ${isUp ? 'text-emerald-400' : 'text-rose-400'}`;
+      pnlPctEl.textContent = `${isUp ? '+' : ''}${pnlPct.toFixed(2)}% Demo P&L`;
+      pnlPctEl.className = `text-[11px] font-mono mt-1 ${isUp ? 'text-emerald-400' : 'text-rose-400'}`;
+
+      document.getElementById('kpi-shares').textContent = Number(client.shares).toLocaleString('en-IN');
+      document.getElementById('kpi-next-alloc').textContent = client.nextAllocation || '74-Day Clearing Window';
+
+      renderOverviewPositions(client);
+      renderClientChainSection();
+      renderTradeHistory(client);
+      renderClientIpoList();
+      renderClientTransactions();
+      updateOrderEstimate('quick');
+      updateOrderEstimate('term');
+    }
+
+    /**
+     * Chain of Clients & 75% Demo Adjustment / 25% Demo Calculation Policy Engine
+     */
+    function renderClientChainSection() {
+      const contList = document.getElementById('continue-chain-list');
+      const breakList = document.getElementById('break-chain-list');
+      if (!contList || !breakList) return;
+
+      const contClients = appState.clients.filter(c => c.chainStatus === 'CONTINUE');
+      const breakClients = appState.clients.filter(c => c.chainStatus !== 'CONTINUE');
+
+      document.getElementById('chain-active-count').textContent = `${contClients.length} Active`;
+      document.getElementById('chain-break-count').textContent = `${breakClients.length} Deactivated`;
+
+      const buildRow = (c, index, isCont) => {
+        const base = Number(c.returnBase || 25000000);
+        const net25 = base * 0.25;
+        return `
+          <div class="pt-3 first:pt-0 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg ${isCont ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'} flex items-center justify-center font-mono text-xs font-bold">
+                ${index + 1}
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-white text-sm">${c.name}</span>
+                  <span class="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase ${isCont ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'}">
+                    ${isCont ? 'CONTINUE' : 'DEAD / DEACTIVATED'}
+                  </span>
+                </div>
+                <div class="text-[11px] font-mono text-slate-400 mt-0.5">
+                  ${c.id} • Base: <span class="text-slate-200">${formatINR(base)}</span> • 25% Net: <span class="text-emerald-400">${formatINR(net25)}</span>
+                </div>
+              </div>
+            </div>
+            <button type="button" onclick="openReturnPolicyModal('${c.id}')" class="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow transition flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate-left"></i>
+              <span>Return</span>
+            </button>
+          </div>
+        `;
+      };
+
+      contList.innerHTML = contClients.map((c, i) => buildRow(c, i, true)).join('');
+      breakList.innerHTML = breakClients.map((c, i) => buildRow(c, i, false)).join('');
+    }
+
+    function openReturnPolicyModal(clientId) {
+      const client = appState.clients.find(c => c.id === clientId);
+      if (!client) return;
+
+      uiState.activeReturnClientId = client.id;
+      const base = Number(client.returnBase || 25000000);
+      const loss75 = base * 0.75;
+      const net25 = base * 0.25;
+      const isCont = client.chainStatus === 'CONTINUE';
+
+      const badge = document.getElementById('ret-modal-status-badge');
+      badge.textContent = isCont ? 'CONTINUE' : 'BREAK / DEAD / DEACTIVATED';
+      badge.className = isCont
+        ? 'px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-emerald-500/20 text-emerald-300'
+        : 'px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-rose-500/20 text-rose-300';
+
+      document.getElementById('ret-modal-client-id').textContent = client.id;
+      document.getElementById('ret-modal-client-name').textContent = client.name;
+      document.getElementById('ret-base-amt').textContent = formatINR(base);
+      document.getElementById('ret-loss-amt').textContent = '-' + formatINR(loss75);
+      document.getElementById('ret-net-amt').textContent = formatINR(net25);
+
+      document.getElementById('policy-agree-checkbox').checked = false;
+      const scrollBox = document.getElementById('policies-scroll-box');
+      if (scrollBox) scrollBox.scrollTop = 0;
+
+      openModal('return-policy-modal');
+    }
+
+    function scrollPoliciesDown() {
+      const scrollBox = document.getElementById('policies-scroll-box');
+      if (scrollBox) {
+        scrollBox.scrollTo({ top: scrollBox.scrollHeight, behavior: 'smooth' });
+      }
+      document.getElementById('policy-agree-checkbox').checked = true;
+      showToast('All 75% Demo Adjustment / 25% Demo Calculation policies scrolled & verified.', 'info');
+    }
+
+    function confirmTwentyFivePercentReturn() {
+      if (!document.getElementById('policy-agree-checkbox').checked) {
+        showToast('Please scroll down and accept all 75% Demo Adjustment / 25% Demo Calculation policies first.', 'error');
+        return;
+      }
+
+      const targetClient = appState.clients.find(c => c.id === uiState.activeReturnClientId);
+      if (!targetClient) return;
+
+      const base = Number(targetClient.returnBase || 25000000);
+      const loss75 = base * 0.75;
+      const net25 = base * 0.25;
+      const nowStr = new Date().toLocaleString('en-IN', { hour12: false });
+
+      targetClient.pending = (Number(targetClient.pending) || 0) + net25;
+      targetClient.nextAllocation = `25% Demo Calculation (${formatINR(net25)}) • 74-Day Cycle`;
+
+      appState.transactions.unshift({
+        txId: 'RET-' + Math.floor(100000 + Math.random() * 900000),
+        clientId: targetClient.id,
+        clientName: targetClient.name,
+        timestamp: nowStr,
+        type: 'WITHDRAWAL',
+        reference: `25% Demo Calculation (75% Demo Adjustment -${formatINR(loss75)} Applied) • 74-Day Clearing`,
+        amount: net25,
+        status: 'PENDING'
+      });
+
+      saveState();
+      closeModal('return-policy-modal');
+      renderClientDashboard();
+      switchClientTab('withdrawal');
+      showToast(`25% Demo Calculation (${formatINR(net25)}) initiated for ${targetClient.name} into 74-Day Clearing.`, 'success');
+    }
+
+    function handleRealisticWithdrawalSubmit(e) {
+      e.preventDefault();
+      const client = getCurrentClient();
+      if (!client) return;
+
+      const holder = document.getElementById('wdr-holder').value.trim();
+      const amount = parseFloat(document.getElementById('wdr-amt').value) || 0;
+
+      if (amount <= 0) return;
+      if (client.balance < amount) {
+        showToast('Withdrawal exceeds Available Balance.', 'error');
+        return;
+      }
+
+      client.balance -= amount;
+      client.pending += amount;
+
+      appState.transactions.unshift({
+        txId: 'WDR-' + Math.floor(100000 + Math.random() * 900000),
+        clientId: client.id,
+        clientName: client.name,
+        timestamp: new Date().toLocaleString('en-IN', { hour12: false }),
+        type: 'WITHDRAWAL',
+        reference: `${bankName} (${ifsc}) A/C ••${accNum.slice(-4)} [${holder}] • 74-Day simulated payout`,
+        amount,
+        status: 'PENDING'
+      });
+
+      saveState();
+      renderClientDashboard();
+      showToast(`74-Day simulated payout Withdrawal of ${formatINR(amount)} submitted to Admin Treasury.`, 'success');
+    }
+
+    function renderOverviewPositions(client) {
+      const tbody = document.getElementById('overview-positions-tbody');
+      if (!tbody) return;
+      if (!client.positions || client.positions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-slate-500 font-sans">No active holdings. Execute a BUY order in the terminal above.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = client.positions.map(pos => {
+        const asset = MARKET_ASSETS.find(a => a.symbol === pos.symbol);
+        const ltp = asset ? asset.price : pos.avgPrice;
+        const investedVal = pos.qty * pos.avgPrice;
+        const pnl = (ltp - pos.avgPrice) * pos.qty;
+        const up = pnl >= 0;
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-3 px-4 font-bold text-white">${pos.symbol}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px]">${pos.category}</span></td>
+            <td class="py-3 px-4 text-right text-slate-200 tabular-nums">${pos.qty}</td>
+            <td class="py-3 px-4 text-right text-slate-400 tabular-nums">${formatINR(pos.avgPrice)}</td>
+            <td class="py-3 px-4 text-right text-white font-semibold tabular-nums">${formatINR(ltp)}</td>
+            <td class="py-3 px-4 text-right text-slate-300 tabular-nums">${formatINR(investedVal)}</td>
+            <td class="py-3 px-4 text-right font-bold tabular-nums ${up ? 'text-emerald-400' : 'text-rose-400'}">${up ? '+' : ''}${formatINR(pnl)}</td>
+            <td class="py-3 px-4 text-right">
+              <button onclick="squareOffPosition('${pos.symbol}')" class="px-2.5 py-1 rounded bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 text-[11px] font-semibold transition">
+                Square Off
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function populateAssetSelectors() {
+      const chartSel = document.getElementById('overview-chart-asset');
+      const quickSel = document.getElementById('quick-trade-symbol');
+      const termSel = document.getElementById('term-trade-symbol');
+
+      const optionsHtml = MARKET_ASSETS.map(a =>
+        `<option value="${a.symbol}">${a.symbol} — ${a.name}</option>`
+      ).join('');
+
+      chartSel.innerHTML = optionsHtml;
+      quickSel.innerHTML = optionsHtml;
+      termSel.innerHTML = optionsHtml;
+
+      quickSel.value = 'RELIANCE';
+      termSel.value = 'RELIANCE';
+      updateChartHeader();
+    }
+
+    function selectChartAsset(symbol) {
+      uiState.selectedChartSymbol = symbol;
+      document.getElementById('overview-chart-asset').value = symbol;
+      updateChartHeader();
+      drawInteractiveChart();
+    }
+
+    function setChartTimeframe(tf) {
+      uiState.chartTimeframe = tf;
+      document.querySelectorAll('.tf-btn').forEach(b => {
+        b.className = b.dataset.tf === tf
+          ? 'tf-btn px-2.5 py-1 rounded bg-slate-800 text-white'
+          : 'tf-btn px-2.5 py-1 rounded text-slate-400 hover:text-white';
+      });
+      const asset = MARKET_ASSETS.find(a => a.symbol === uiState.selectedChartSymbol);
+      if (asset) {
+        uiState.chartHistory[asset.symbol] = generateChartSeries(asset.price, 48);
+      }
+      drawInteractiveChart();
+    }
+
+    function setChartType(type) {
+      uiState.chartType = type;
+      document.querySelectorAll('.ctype-btn').forEach(b => {
+        b.className = b.dataset.ctype === type
+          ? 'ctype-btn px-2.5 py-1 rounded bg-emerald-600 text-white'
+          : 'ctype-btn px-2.5 py-1 rounded text-slate-400 hover:text-white';
+      });
+      drawInteractiveChart();
+    }
+
+    function updateChartHeader() {
+      const asset = MARKET_ASSETS.find(a => a.symbol === uiState.selectedChartSymbol) || MARKET_ASSETS[0];
+      const up = asset.changePct >= 0;
+      document.getElementById('chart-live-price').textContent = asset.category === 'INDEX'
+        ? asset.price.toLocaleString('en-IN')
+        : formatINR(asset.price);
+      const chgEl = document.getElementById('chart-live-change');
+      chgEl.textContent = `${up ? '+' : ''}${asset.changePct.toFixed(2)}% (${uiState.chartTimeframe})`;
+      chgEl.className = `text-xs font-mono ${up ? 'text-emerald-400' : 'text-rose-400'}`;
+    }
+
+    function generateChartSeries(currentPrice, points) {
+      const arr = [];
+      let p = currentPrice * 0.985;
+      for (let i = 0; i < points; i++) {
+        const open = p;
+        const change = (Math.random() - 0.48) * (currentPrice * 0.008);
+        const close = i === points - 1 ? currentPrice : Math.max(1, open + change);
+        const high = Math.max(open, close) * (1 + Math.random() * 0.0025);
+        const low = Math.min(open, close) * (1 - Math.random() * 0.0025);
+        arr.push({
+          open, high, low, close,
+          time: `${String(9 + Math.floor(i / 8)).padStart(2, '0')}:${String((i * 7) % 60).padStart(2, '0')}`
+        });
+        p = close;
+      }
+      return arr;
+    }
+
+    function drawInteractiveChart() {
+      const canvas = document.getElementById('market-chart-canvas');
+      const container = document.getElementById('chart-container-overview');
+      if (!canvas || !container || container.offsetParent === null) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const width = rect.width;
+      const height = rect.height;
+      const pad = { top: 20, right: 65, bottom: 26, left: 16 };
+      const plotW = width - pad.left - pad.right;
+      const plotH = height - pad.top - pad.bottom;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const data = uiState.chartHistory[uiState.selectedChartSymbol] || [];
+      if (data.length < 2) return;
+
+      const highs = data.map(d => d.high);
+      const lows = data.map(d => d.low);
+      const maxVal = Math.max(...highs);
+      const minVal = Math.min(...lows);
+      const range = (maxVal - minVal) || 1;
+
+      const getY = val => pad.top + plotH - ((val - minVal) / range) * plotH;
+      const getX = idx => pad.left + (idx / (data.length - 1)) * plotW;
+
+      ctx.strokeStyle = 'rgba(51, 65, 85, 0.35)';
+      ctx.lineWidth = 1;
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left';
+
+      for (let i = 0; i <= 4; i++) {
+        const y = pad.top + (plotH / 4) * i;
+        const val = maxVal - (range / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, y);
+        ctx.lineTo(width - pad.right, y);
+        ctx.stroke();
+        ctx.fillText(val.toLocaleString('en-IN', { maximumFractionDigits: 1 }), width - pad.right + 6, y + 3);
+      }
+
+      const isOverallUp = data[data.length - 1].close >= data[0].open;
+      const strokeColor = isOverallUp ? '#10b981' : '#f43f5e';
+
+      if (uiState.chartType === 'line') {
+        const grad = ctx.createLinearGradient(0, pad.top, 0, height - pad.bottom);
+        grad.addColorStop(0, isOverallUp ? 'rgba(16, 185, 129, 0.28)' : 'rgba(244, 63, 94, 0.28)');
+        grad.addColorStop(1, 'rgba(6, 9, 14, 0.0)');
+
+        ctx.beginPath();
+        data.forEach((pt, idx) => {
+          const x = getX(idx);
+          const y = getY(pt.close);
+          if (idx === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.lineTo(getX(data.length - 1), height - pad.bottom);
+        ctx.lineTo(getX(0), height - pad.bottom);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+      } else {
+        const candleW = Math.max(3, (plotW / data.length) * 0.62);
+        data.forEach((pt, idx) => {
+          const x = getX(idx);
+          const yOpen = getY(pt.open);
+          const yClose = getY(pt.close);
+          const yHigh = getY(pt.high);
+          const yLow = getY(pt.low);
+          const up = pt.close >= pt.open;
+          const color = up ? '#10b981' : '#f43f5e';
+
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(x, yHigh);
+          ctx.lineTo(x, yLow);
+          ctx.stroke();
+
+          ctx.fillStyle = color;
+          const topY = Math.min(yOpen, yClose);
+          const bodyH = Math.max(2, Math.abs(yClose - yOpen));
+          ctx.fillRect(x - candleW / 2, topY, candleW, bodyH);
+        });
+      }
+
+      if (!canvas.dataset.boundHover) {
+        canvas.dataset.boundHover = 'true';
+        canvas.addEventListener('mousemove', e => {
+          const r = canvas.getBoundingClientRect();
+          const mouseX = e.clientX - r.left;
+          const series = uiState.chartHistory[uiState.selectedChartSymbol] || [];
+          if (!series.length) return;
+          const ratio = Math.max(0, Math.min(1, (mouseX - pad.left) / (r.width - pad.left - pad.right)));
+          const idx = Math.round(ratio * (series.length - 1));
+          const pt = series[idx];
+          const tip = document.getElementById('chart-tooltip');
+          tip.classList.remove('hidden');
+          tip.style.left = Math.min(r.width - 155, Math.max(12, mouseX + 12)) + 'px';
+          tip.style.top = '16px';
+          tip.innerHTML = `
+            <div class="text-slate-400 text-[10px]">${uiState.selectedChartSymbol} • ${pt.time}</div>
+            <div class="text-white font-bold">Close: ${pt.close.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</div>
+            <div class="text-[10px] text-slate-400">H: ${pt.high.toFixed(1)} | L: ${pt.low.toFixed(1)}</div>
+          `;
+        });
+        canvas.addEventListener('mouseleave', () => {
+          document.getElementById('chart-tooltip').classList.add('hidden');
+        });
+      }
+    }
+
+    function setOrderSide(side) {
+      uiState.orderSide = side;
+      ['quick', 'term'].forEach(prefix => {
+        const buyBtn = document.getElementById(`${prefix}-side-buy`);
+        const sellBtn = document.getElementById(`${prefix}-side-sell`);
+        const subBtn = document.getElementById(`${prefix}-order-submit`);
+        if (side === 'BUY') {
+          buyBtn.className = 'py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white transition';
+          sellBtn.className = 'py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition';
+          subBtn.className = 'w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-wide uppercase shadow-lg transition';
+          subBtn.textContent = prefix === 'quick' ? 'Place Instant BUY Order' : 'Execute BUY Order';
+        } else {
+          sellBtn.className = 'py-2 rounded-lg text-xs font-bold bg-rose-600 text-white transition';
+          buyBtn.className = 'py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition';
+          subBtn.className = 'w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs tracking-wide uppercase shadow-lg transition';
+          subBtn.textContent = prefix === 'quick' ? 'Place Instant SELL Order' : 'Execute SELL Order';
+        }
+      });
+    }
+
+    function toggleLimitPrice(prefix) {
+      const type = document.getElementById(`${prefix}-trade-type`).value;
+      const wrap = document.getElementById(`${prefix}-limit-wrap`);
+      const sym = document.getElementById(`${prefix}-trade-symbol`).value;
+      const asset = MARKET_ASSETS.find(a => a.symbol === sym);
+      if (type === 'LIMIT') {
+        wrap.classList.remove('hidden');
+        if (asset) document.getElementById(`${prefix}-trade-limit`).value = asset.price;
+      } else {
+        wrap.classList.add('hidden');
+      }
+      updateOrderEstimate(prefix);
+    }
+
+    function updateOrderEstimate(prefix) {
+      const symEl = document.getElementById(`${prefix}-trade-symbol`);
+      if (!symEl) return;
+      const sym = symEl.value;
+      const qty = parseFloat(document.getElementById(`${prefix}-trade-qty`).value) || 0;
+      const type = document.getElementById(`${prefix}-trade-type`).value;
+      const asset = MARKET_ASSETS.find(a => a.symbol === sym) || MARKET_ASSETS[0];
+      const execPrice = type === 'LIMIT'
+        ? (parseFloat(document.getElementById(`${prefix}-trade-limit`).value) || asset.price)
+        : asset.price;
+
+      const total = qty * execPrice;
+      document.getElementById(`${prefix}-order-total`).textContent = formatINR(total);
+      if (prefix === 'term') {
+        document.getElementById('term-live-ltp').textContent = formatINR(asset.price);
+      }
+    }
+
+    function filterMarketWatch(cat) {
+      uiState.marketFilter = cat;
+      document.querySelectorAll('.mw-filter-btn').forEach(b => {
+        b.className = b.dataset.mw === cat
+          ? 'mw-filter-btn px-2.5 py-1 rounded bg-emerald-600 text-white'
+          : 'mw-filter-btn px-2.5 py-1 rounded bg-slate-800 text-slate-300';
+      });
+      renderMarketWatch();
+    }
+
+    function renderMarketWatch() {
+      const tbody = document.getElementById('market-watch-tbody');
+      if (!tbody) return;
+      const filtered = MARKET_ASSETS.filter(a => uiState.marketFilter === 'ALL' || a.category === uiState.marketFilter);
+      tbody.innerHTML = filtered.map(a => {
+        const up = a.changePct >= 0;
+        const priceStr = a.category === 'INDEX' ? a.price.toLocaleString('en-IN') : formatINR(a.price);
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-3 px-4">
+              <div class="font-bold text-white">${a.symbol}</div>
+              <div class="text-[10px] text-slate-500 font-sans">${a.name}</div>
+            </td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px]">${a.category}</span></td>
+            <td class="py-3 px-4 text-right font-bold text-white tabular-nums">${priceStr}</td>
+            <td class="py-3 px-4 text-right font-semibold tabular-nums ${up ? 'text-emerald-400' : 'text-rose-400'}">
+              ${up ? '+' : ''}${a.changePct.toFixed(2)}%
+            </td>
+            <td class="py-3 px-4 text-right space-x-1">
+              <button onclick="prefillTrade('${a.symbol}', 'BUY')" class="px-2 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 text-[10px] font-bold">BUY</button>
+              <button onclick="prefillTrade('${a.symbol}', 'SELL')" class="px-2 py-1 rounded bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 text-[10px] font-bold">SELL</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function prefillTrade(symbol, side) {
+      setOrderSide(side);
+      document.getElementById('term-trade-symbol').value = symbol;
+      document.getElementById('quick-trade-symbol').value = symbol;
+      updateOrderEstimate('term');
+      updateOrderEstimate('quick');
+      showToast(`Loaded ${side} ticket for ${symbol}`, 'info');
+    }
+
+    function executeTradeOrder(e, prefix) {
+      e.preventDefault();
+      const client = getCurrentClient();
+      if (!client) return;
+
+      const symbol = document.getElementById(`${prefix}-trade-symbol`).value;
+      const qty = parseFloat(document.getElementById(`${prefix}-trade-qty`).value);
+      const type = document.getElementById(`${prefix}-trade-type`).value;
+      const asset = MARKET_ASSETS.find(a => a.symbol === symbol);
+      if (!asset || qty <= 0) return;
+
+      const execPrice = type === 'LIMIT'
+        ? (parseFloat(document.getElementById(`${prefix}-trade-limit`).value) || asset.price)
+        : asset.price;
+      const orderTotal = Number((qty * execPrice).toFixed(2));
+      const side = uiState.orderSide;
+      const nowStr = new Date().toLocaleString('en-IN', { hour12: false });
+
+      if (side === 'BUY') {
+        if (client.balance < orderTotal) {
+          showToast('Insufficient Available Balance for this BUY order.', 'error');
+          return;
+        }
+        client.balance -= orderTotal;
+        client.invested += orderTotal;
+        client.shares = Number((client.shares + qty).toFixed(4));
+
+        const existingPos = client.positions.find(p => p.symbol === symbol);
+        if (existingPos) {
+          const newTotalCost = (existingPos.avgPrice * existingPos.qty) + orderTotal;
+          existingPos.qty = Number((existingPos.qty + qty).toFixed(4));
+          existingPos.avgPrice = Number((newTotalCost / existingPos.qty).toFixed(2));
+        } else {
+          client.positions.push({
+            symbol: asset.symbol,
+            category: asset.category,
+            qty: qty,
+            avgPrice: execPrice
+          });
+        }
+      } else {
+        const existingPos = client.positions.find(p => p.symbol === symbol);
+        if (!existingPos || existingPos.qty < qty) {
+          showToast(`Insufficient ${symbol} holdings to sell ${qty} units.`, 'error');
+          return;
+        }
+        const costReleased = existingPos.avgPrice * qty;
+        existingPos.qty = Number((existingPos.qty - qty).toFixed(4));
+        if (existingPos.qty <= 0.00001) {
+          client.positions = client.positions.filter(p => p.symbol !== symbol);
+        }
+        client.balance += orderTotal;
+        client.invested = Math.max(0, client.invested - costReleased);
+        client.shares = Math.max(0, Number((client.shares - qty).toFixed(4)));
+      }
+
+      const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+      client.trades.unshift({
+        orderId,
+        timestamp: nowStr,
+        symbol,
+        side,
+        qty,
+        price: execPrice,
+        total: orderTotal
+      });
+
+      appState.transactions.unshift({
+        txId: 'TXN-' + Math.floor(100000 + Math.random() * 900000),
+        clientId: client.id,
+        clientName: client.name,
+        timestamp: nowStr,
+        type: 'TRADE',
+        reference: `${side} ${qty} ${symbol} @ ${formatINR(execPrice)}`,
+        amount: orderTotal,
+        status: 'EXECUTED'
+      });
+
+      saveState();
+      renderClientDashboard();
+      showToast(`${side} Order Executed: ${qty} ${symbol} for ${formatINR(orderTotal)}`, 'success');
+    }
+
+    function squareOffPosition(symbol) {
+      const client = getCurrentClient();
+      if (!client) return;
+      const pos = client.positions.find(p => p.symbol === symbol);
+      if (!pos) return;
+
+      const asset = MARKET_ASSETS.find(a => a.symbol === symbol);
+      const ltp = asset ? asset.price : pos.avgPrice;
+      const payout = Number((pos.qty * ltp).toFixed(2));
+      const costReleased = pos.qty * pos.avgPrice;
+      const nowStr = new Date().toLocaleString('en-IN', { hour12: false });
+
+      client.balance += payout;
+      client.invested = Math.max(0, client.invested - costReleased);
+      client.shares = Math.max(0, Number((client.shares - pos.qty).toFixed(4)));
+      client.positions = client.positions.filter(p => p.symbol !== symbol);
+
+      client.trades.unshift({
+        orderId: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
+        timestamp: nowStr,
+        symbol,
+        side: 'SELL',
+        qty: pos.qty,
+        price: ltp,
+        total: payout
+      });
+
+      appState.transactions.unshift({
+        txId: 'TXN-' + Math.floor(100000 + Math.random() * 900000),
+        clientId: client.id,
+        clientName: client.name,
+        timestamp: nowStr,
+        type: 'TRADE',
+        reference: `SQUARE-OFF ${pos.qty} ${symbol}`,
+        amount: payout,
+        status: 'EXECUTED'
+      });
+
+      saveState();
+      renderClientDashboard();
+      showToast(`Squared off ${symbol} position for ${formatINR(payout)}`, 'success');
+    }
+
+    function resetPaperMargin() {
+      const client = getCurrentClient();
+      if (!client) return;
+      client.balance += 500000;
+      appState.transactions.unshift({
+        txId: 'TXN-' + Math.floor(100000 + Math.random() * 900000),
+        clientId: client.id,
+        clientName: client.name,
+        timestamp: new Date().toLocaleString('en-IN', { hour12: false }),
+        type: 'DEPOSIT',
+        reference: 'PAPER-MARGIN-TOPUP',
+        amount: 500000,
+        status: 'COMPLETED'
+      });
+      saveState();
+      renderClientDashboard();
+      showToast('Added ₹5,00,000 Paper Trading Margin to Available Balance.', 'success');
+    }
+
+    function renderTradeHistory(client) {
+      const tbody = document.getElementById('trade-history-tbody');
+      if (!tbody) return;
+      if (!client.trades || client.trades.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-500 font-sans">No trades executed yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = client.trades.map(t => `
+        <tr class="hover:bg-slate-800/40 transition">
+          <td class="py-3 px-4 text-slate-400">${t.orderId}</td>
+          <td class="py-3 px-4 text-slate-400">${t.timestamp}</td>
+          <td class="py-3 px-4 font-bold text-white">${t.symbol}</td>
+          <td class="py-3 px-4">
+            <span class="px-2 py-0.5 rounded font-bold text-[10px] ${t.side === 'BUY' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'}">
+              ${t.side}
+            </span>
+          </td>
+          <td class="py-3 px-4 text-right text-slate-200 tabular-nums">${t.qty}</td>
+          <td class="py-3 px-4 text-right text-slate-300 tabular-nums">${formatINR(t.price)}</td>
+          <td class="py-3 px-4 text-right font-semibold text-white tabular-nums">${formatINR(t.total)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function updateIpoCost() {
+      const lots = parseInt(document.getElementById('ipo-lots').value, 10) || 1;
+      const shares = lots * 10;
+      const total = shares * 1495;
+      document.getElementById('ipo-shares-count').textContent = `${shares.toLocaleString('en-IN')} Shares @ ₹1,495`;
+      document.getElementById('ipo-total-cost').textContent = formatINR(total);
+    }
+
+    function submitJioIpoApplication(e) {
+      e.preventDefault();
+      const client = getCurrentClient();
+      if (!client) return;
+
+      const lots = parseInt(document.getElementById('ipo-lots').value, 10);
+      const category = document.getElementById('ipo-category').value;
+      const utr = document.getElementById('ipo-utr').value.trim();
+      const shares = lots * 10;
+      const amount = shares * 1495;
+
+      if (client.balance < amount) {
+        showToast('Insufficient Available Balance to block Jio IPO mandate.', 'error');
+        return;
+      }
+
+      client.balance -= amount;
+      client.pending += amount;
+      client.nextAllocation = `Jio IPO (${shares} Sh • Pending)`;
+
+      const appId = 'JIO-' + Math.floor(100000 + Math.random() * 900000);
+      const nowStr = new Date().toLocaleString('en-IN', { hour12: false });
+
+      if (!client.ipoApps) client.ipoApps = [];
+      client.ipoApps.unshift({
+        appId,
+        category,
+        lots,
+        shares,
+        amount,
+        utr,
+        status: 'MANDATE_BLOCKED',
+        timestamp: nowStr
+      });
+
+      appState.transactions.unshift({
+        txId: 'TXN-' + Math.floor(100000 + Math.random() * 900000),
+        clientId: client.id,
+        clientName: client.name,
+        timestamp: nowStr,
+        type: 'IPO',
+        reference: `Jio IPO (${shares} Sh) • UTR: ${utr}`,
+        amount,
+        status: 'PENDING'
+      });
+
+      document.getElementById('ipo-utr').value = '';
+      saveState();
+      renderClientDashboard();
+      showToast(`Jio IPO Bid Submitted (${shares} Shares). Mandate blocked in Pending Amount.`, 'success');
+    }
+
+    function renderClientIpoList() {
+      const container = document.getElementById('ipo-applications-list');
+      const client = getCurrentClient();
+      if (!container || !client) return;
+
+      if (!client.ipoApps || client.ipoApps.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center border border-dashed border-slate-800 rounded-xl text-xs text-slate-500">No Jio IPO applications submitted yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = client.ipoApps.map(app => `
+        <div class="p-3.5 rounded-xl bg-obsidian-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-bold text-white text-xs">${app.appId}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono ${app.status === 'ALLOCATED' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-300'}">
+                ${app.status === 'ALLOCATED' ? 'ALLOTTED' : 'MANDATE BLOCKED'}
+              </span>
+            </div>
+            <div class="text-xs text-slate-400 mt-1 font-mono">${app.shares} Shares (${app.lots} Lots) • ${formatINR(app.amount)}</div>
+            <div class="text-[10px] text-slate-500 font-mono">UTR: ${app.utr}</div>
+          </div>
+          ${app.status !== 'ALLOCATED' ? `
+            <button onclick="simulateIpoAllotment('${app.appId}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
+              Simulate Allotment
+            </button>
+          ` : `<span class="text-xs font-mono text-emerald-400"><i class="fa-solid fa-check-double mr-1"></i>Credited</span>`}
+        </div>
+      `).join('');
+    }
+
+    function simulateIpoAllotment(appId) {
+      const client = getCurrentClient();
+      if (!client || !client.ipoApps) return;
+      const app = client.ipoApps.find(a => a.appId === appId);
+      if (!app || app.status === 'ALLOCATED') return;
+
+      app.status = 'ALLOCATED';
+      client.pending = Math.max(0, client.pending - app.amount);
+      client.invested += app.amount;
+      client.shares += app.shares;
+      client.nextAllocation = `Jio IPO Allocated (${app.shares} Sh)`;
+
+      const existingJio = client.positions.find(p => p.symbol === 'JIO-IPO');
+      if (existingJio) {
+        existingJio.qty += app.shares;
+      } else {
+        client.positions.push({
+          symbol: 'JIO-IPO',
+          category: 'IPO EQUITY',
+          qty: app.shares,
+          avgPrice: 1495
+        });
+      }
+
+      appState.transactions.unshift({
+        txId: 'TXN-' + Math.floor(100000 + Math.random() * 900000),
+        clientId: client.id,
+        clientName: client.name,
+        timestamp: new Date().toLocaleString('en-IN', { hour12: false }),
+        type: 'IPO',
+        reference: `Allotment Credited: ${app.shares} JIO Shares (${app.appId})`,
+        amount: app.amount,
+        status: 'ALLOCATED'
+      });
+
+      saveState();
+      renderClientDashboard();
+      showToast(`Jio IPO Allotment Confirmed: ${app.shares} Shares credited to holdings.`, 'success');
+    }
+
+    function simulateMarketTick() {
+      MARKET_ASSETS.forEach(asset => {
+        const deltaPct = (Math.random() - 0.49) * 0.004;
+        asset.price = Math.max(1, Number((asset.price * (1 + deltaPct)).toFixed(asset.price > 10000 ? 0 : 2)));
+        asset.changePct = Number((((asset.price - asset.prevClose) / asset.prevClose) * 100).toFixed(2));
+
+        const series = uiState.chartHistory[asset.symbol];
+        if (series && series.length) {
+          const last = series[series.length - 1];
+          last.close = asset.price;
+          last.high = Math.max(last.high, asset.price);
+          last.low = Math.min(last.low, asset.price);
+        }
+      });
+
+      const nifty = MARKET_ASSETS[0];
+      const sensex = MARKET_ASSETS[1];
+      const btc = MARKET_ASSETS[8];
+      if (document.getElementById('login-nifty')) {
+        document.getElementById('login-nifty').textContent = `${nifty.price.toLocaleString('en-IN')} (${nifty.changePct >= 0 ? '+' : ''}${nifty.changePct}%)`;
+        document.getElementById('login-sensex').textContent = `${sensex.price.toLocaleString('en-IN')} (${sensex.changePct >= 0 ? '+' : ''}${sensex.changePct}%)`;
+        document.getElementById('login-btc').textContent = `${formatINR(btc.price)} (${btc.changePct >= 0 ? '+' : ''}${btc.changePct}%)`;
+      }
+
+      renderTickerBar();
+      renderMarketCards();
+      renderMarketWatch();
+
+      if (appState.session && appState.session.role === 'client') {
+        updateChartHeader();
+        drawInteractiveChart();
+        const client = getCurrentClient();
+        if (client) {
+          let livePnl = 0;
+          let totalPosCost = 0;
+          (client.positions || []).forEach(pos => {
+            const a = MARKET_ASSETS.find(m => m.symbol === pos.symbol);
+            const ltp = a ? a.price : pos.avgPrice;
+            livePnl += (ltp - pos.avgPrice) * pos.qty;
+            totalPosCost += pos.avgPrice * pos.qty;
+          });
+          const pnlPct = totalPosCost > 0 ? (livePnl / totalPosCost) * 100 : 0;
+          const pnlEl = document.getElementById('kpi-pnl');
+          const pnlPctEl = document.getElementById('kpi-pnl-pct');
+          const up = livePnl >= 0;
+          pnlEl.textContent = `${up ? '+' : ''}${formatINR(livePnl)}`;
+          pnlEl.className = `text-lg sm:text-xl font-bold font-mono tabular-nums truncate ${up ? 'text-emerald-400' : 'text-rose-400'}`;
+          pnlPctEl.textContent = `${up ? '+' : ''}${pnlPct.toFixed(2)}% Demo P&L`;
+          pnlPctEl.className = `text-[11px] font-mono mt-1 ${up ? 'text-emerald-400' : 'text-rose-400'}`;
+          renderOverviewPositions(client);
+        }
+      }
+    }
+
+    function renderTickerBar() {
+      const track = document.getElementById('live-ticker-track');
+      if (!track) return;
+      const itemsHtml = MARKET_ASSETS.map(a => {
+        const up = a.changePct >= 0;
+        const priceStr = a.category === 'INDEX' ? a.price.toLocaleString('en-IN') : formatINR(a.price);
+        return `
+          <span class="inline-flex items-center gap-2">
+            <span class="font-bold text-slate-300">${a.symbol}</span>
+            <span class="text-white tabular-nums">${priceStr}</span>
+            <span class="${up ? 'text-emerald-400' : 'text-rose-400'} tabular-nums">${up ? '▲' : '▼'} ${Math.abs(a.changePct).toFixed(2)}%</span>
+          </span>
+        `;
+      }).join('');
+      track.innerHTML = itemsHtml + itemsHtml;
+    }
+
+    function renderMarketCards() {
+      const grid = document.getElementById('market-cards-grid');
+      if (!grid) return;
+      const featured = ['NIFTY 50', 'SENSEX', 'BTC/INR', 'ETH/INR'].map(sym => MARKET_ASSETS.find(a => a.symbol === sym));
+      grid.innerHTML = featured.map(a => {
+        if (!a) return '';
+        const up = a.changePct >= 0;
+        const priceStr = a.category === 'INDEX' ? a.price.toLocaleString('en-IN') : formatINR(a.price);
+        return `
+          <div onclick="selectChartAsset('${a.symbol}'); switchClientTab('overview');" class="cursor-pointer bg-obsidian-900 border border-slate-800 hover:border-slate-700 rounded-xl p-4 transition">
+            <div class="flex items-center justify-between text-xs mb-1">
+              <span class="font-bold text-white">${a.symbol}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono ${up ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'}">
+                ${up ? '+' : ''}${a.changePct.toFixed(2)}%
+              </span>
+            </div>
+            <div class="text-lg font-bold font-mono text-white tabular-nums">${priceStr}</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">${a.name}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleDepositSubmit(e) {
+      e.preventDefault();
+      const client = getCurrentClient();
+      if (!client) return;
+
+      const amount = parseFloat(document.getElementById('deposit-amount').value);
+      const mode = document.getElementById('deposit-mode').value;
+      const utr = document.getElementById('deposit-utr').value.trim();
+
+      if (amount <= 0 || !utr) return;
+
+      client.balance += amount;
+      appState.transactions.unshift({
+        txId: 'TXN-' + Math.floor(100000 + Math.random() * 900000),
+        clientId: client.id,
+        clientName: client.name,
+        timestamp: new Date().toLocaleString('en-IN', { hour12: false }),
+        type: 'DEPOSIT',
+        reference: `${mode} • UTR: ${utr}`,
+        amount,
+        status: 'COMPLETED'
+      });
+
+      document.getElementById('deposit-amount').value = '';
+      document.getElementById('deposit-utr').value = '';
+      closeModal('deposit-modal');
+      saveState();
+      renderClientDashboard();
+      showToast(`Deposited ${formatINR(amount)} via UTR ${utr}.`, 'success');
+    }
+
+    function renderClientTransactions() {
+      const tbody = document.getElementById('client-tx-tbody');
+      const client = getCurrentClient();
+      if (!tbody || !client) return;
+
+      const filter = document.getElementById('client-tx-filter').value;
+      const list = appState.transactions.filter(tx =>
+        tx.clientId === client.id && (filter === 'ALL' || tx.type === filter)
+      );
+
+      if (!list.length) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500 font-sans">No matching ledger records found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(tx => `
+        <tr class="hover:bg-slate-800/40 transition">
+          <td class="py-3 px-4 text-slate-400">${tx.txId}</td>
+          <td class="py-3 px-4 text-slate-400">${tx.timestamp}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-200 text-[10px]">${tx.type}</span></td>
+          <td class="py-3 px-4 text-slate-300">${tx.reference}</td>
+          <td class="py-3 px-4 text-right font-semibold text-white tabular-nums">${formatINR(tx.amount)}</td>
+          <td class="py-3 px-4 text-right">${renderStatusBadge(tx.status)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderStatusBadge(status) {
+      if (status === 'COMPLETED' || status === 'APPROVED' || status === 'EXECUTED' || status === 'ALLOCATED') {
+        return `<span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">${status}</span>`;
+      }
+      if (status === 'PENDING') {
+        return `<span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-bold">PENDING</span>`;
+      }
+      return `<span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/30 text-[10px] font-bold">${status}</span>`;
+    }
+
+    function switchAdminTab(tab) {
+      ['clients', 'withdrawals', 'transactions'].forEach(t => {
+        document.getElementById(`atab-${t}`).classList.toggle('hidden', t !== tab);
+      });
+
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        const active = btn.dataset.atab === tab;
+        btn.className = active
+          ? 'admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-amber-600 text-white transition whitespace-nowrap'
+          : 'admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-obsidian-900 text-slate-400 hover:text-white border border-slate-800 transition whitespace-nowrap';
+      });
+    }
+
+    function renderAdminDashboard() {
+      const totalAum = appState.clients.reduce((sum, c) => sum + (Number(c.balance) || 0), 0);
+      const totalInv = appState.clients.reduce((sum, c) => sum + (Number(c.invested) || 0), 0);
+      const pendingWithdrawals = appState.transactions.filter(t => t.type === 'WITHDRAWAL' && t.status === 'PENDING');
+      const pendingAmt = pendingWithdrawals.reduce((sum, t) => sum + t.amount, 0);
+
+      document.getElementById('admin-kpi-aum').textContent = formatINR(totalAum);
+      document.getElementById('admin-kpi-invested').textContent = formatINR(totalInv);
+      document.getElementById('admin-kpi-pending-count').textContent = pendingWithdrawals.length;
+      document.getElementById('admin-kpi-pending-amt').textContent = `${formatINR(pendingAmt)} Awaiting Approval`;
+      document.getElementById('admin-kpi-tx-count').textContent = appState.transactions.length;
+      document.getElementById('admin-badge-withdrawals').textContent = pendingWithdrawals.length;
+
+      renderAdminClientsTable();
+      renderAdminWithdrawalsTable();
+      renderAdminMasterTransactions();
+    }
+
+    function renderAdminClientsTable() {
+      const tbody = document.getElementById('admin-clients-tbody');
+      if (!tbody) return;
+      const query = (document.getElementById('admin-client-search').value || '').toLowerCase();
+
+      const filtered = appState.clients.filter(c =>
+        c.name.toLowerCase().includes(query) || c.id.toLowerCase().includes(query)
+      );
+
+      tbody.innerHTML = filtered.map(c => {
+        const isCont = c.chainStatus === 'CONTINUE';
+        return `
+        <tr class="hover:bg-slate-800/40 transition">
+          <td class="py-3.5 px-4 text-emerald-400 font-semibold">${c.id}</td>
+          <td class="py-3.5 px-4 font-sans font-bold text-white">${c.name}</td>
+          <td class="py-3.5 px-4">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isCont ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'}">
+              ${isCont ? 'CONTINUE' : 'BREAK / DEAD'}
+            </span>
+          </td>
+          <td class="py-3.5 px-4 text-slate-400">${c.pass}</td>
+          <td class="py-3.5 px-4 text-right font-semibold text-white tabular-nums">${formatINR(c.balance)}</td>
+          <td class="py-3.5 px-4 text-right text-sky-400 tabular-nums">${formatINR(c.returnBase || 25000000)}</td>
+          <td class="py-3.5 px-4 text-right text-amber-400 tabular-nums">${formatINR(c.pending)}</td>
+          <td class="py-3.5 px-4 text-right">
+            <button onclick="openAdminEditClient('${c.id}')" class="px-3 py-1.5 rounded-lg bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white border border-amber-500/40 font-semibold transition">
+              Edit Account
+            </button>
+          </td>
+        </tr>
+      `;
+      }).join('');
+    }
+
+    function openAdminEditClient(clientId) {
+      const client = appState.clients.find(c => c.id === clientId);
+      if (!client) return;
+
+      document.getElementById('edit-client-id').value = client.id;
+      document.getElementById('edit-client-subtitle').textContent = `${client.name} (${client.id})`;
+      document.getElementById('edit-chain-status').value = client.chainStatus || 'CONTINUE';
+      document.getElementById('edit-return-base').value = client.returnBase || 25000000;
+      document.getElementById('edit-balance').value = client.balance;
+      document.getElementById('edit-invested').value = client.invested;
+      document.getElementById('edit-pending').value = client.pending;
+      document.getElementById('edit-shares').value = client.shares;
+      document.getElementById('edit-next-alloc').value = client.nextAllocation;
+
+      openModal('admin-edit-modal');
+    }
+
+    function saveAdminClientEdits(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-client-id').value;
+      const client = appState.clients.find(c => c.id === id);
+      if (!client) return;
+
+      client.chainStatus = document.getElementById('edit-chain-status').value;
+      client.returnBase = parseFloat(document.getElementById('edit-return-base').value) || 25000000;
+      client.balance = parseFloat(document.getElementById('edit-balance').value) || 0;
+      client.invested = parseFloat(document.getElementById('edit-invested').value) || 0;
+      client.pending = parseFloat(document.getElementById('edit-pending').value) || 0;
+      client.shares = parseFloat(document.getElementById('edit-shares').value) || 0;
+      client.nextAllocation = document.getElementById('edit-next-alloc').value.trim();
+
+      appState.transactions.unshift({
+        txId: 'ADM-' + Math.floor(100000 + Math.random() * 900000),
+        clientId: client.id,
+        clientName: client.name,
+        timestamp: new Date().toLocaleString('en-IN', { hour12: false }),
+        type: 'ADMIN_ADJUST',
+        reference: `Status (${client.chainStatus}) & Balances Updated by Admin`,
+        amount: client.balance,
+        status: 'COMPLETED'
+      });
+
+      saveState();
+      closeModal('admin-edit-modal');
+      populateCredentialsModal();
+      renderAdminDashboard();
+      showToast(`Updated ${client.name}'s chain status & balances immediately.`, 'success');
+    }
+
+    function renderAdminWithdrawalsTable() {
+      const tbody = document.getElementById('admin-withdrawals-tbody');
+      const withdrawals = appState.transactions.filter(t => t.type === 'WITHDRAWAL');
+
+      if (!withdrawals.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-500 font-sans">No withdrawal or 25% return claims submitted yet.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = withdrawals.map(w => `
+        <tr class="hover:bg-slate-800/40 transition">
+          <td class="py-3.5 px-4 text-slate-400">${w.txId}</td>
+          <td class="py-3.5 px-4 font-bold text-white">${w.clientName} <span class="text-slate-500 font-normal">(${w.clientId})</span></td>
+          <td class="py-3.5 px-4 text-slate-400">${w.timestamp}</td>
+          <td class="py-3.5 px-4 text-slate-300">${w.reference}</td>
+          <td class="py-3.5 px-4 text-right font-bold text-white tabular-nums">${formatINR(w.amount)}</td>
+          <td class="py-3.5 px-4 text-center">${renderStatusBadge(w.status)}</td>
+          <td class="py-3.5 px-4 text-right space-x-1.5">
+            ${w.status === 'PENDING' ? `
+              <button onclick="processWithdrawalDecision('${w.txId}', 'APPROVED')" class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold">Approve</button>
+              <button onclick="processWithdrawalDecision('${w.txId}', 'REJECTED')" class="px-2.5 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold">Reject</button>
+            ` : `<span class="text-slate-500 text-[11px]">Processed</span>`}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function processWithdrawalDecision(txId, decision) {
+      const tx = appState.transactions.find(t => t.txId === txId);
+      if (!tx || tx.status !== 'PENDING') return;
+
+      const client = appState.clients.find(c => c.id === tx.clientId);
+      tx.status = decision;
+
+      if (client) {
+        client.pending = Math.max(0, client.pending - tx.amount);
+        if (decision === 'REJECTED') {
+          client.balance += tx.amount;
+        }
+      }
+
+      saveState();
+      renderAdminDashboard();
+      showToast(`Request ${txId} marked as ${decision}.`, decision === 'APPROVED' ? 'success' : 'info');
+    }
+
+    function renderAdminMasterTransactions() {
+      const tbody = document.getElementById('admin-all-tx-tbody');
+      tbody.innerHTML = appState.transactions.map(tx => `
+        <tr class="hover:bg-slate-800/40 transition">
+          <td class="py-3 px-4 text-slate-400">${tx.txId}</td>
+          <td class="py-3 px-4 text-white font-semibold">${tx.clientName} <span class="text-slate-500 font-normal">(${tx.clientId})</span></td>
+          <td class="py-3 px-4 text-slate-400">${tx.timestamp}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">${tx.type}</span></td>
+          <td class="py-3 px-4 text-slate-300">${tx.reference}</td>
+          <td class="py-3 px-4 text-right font-semibold text-white tabular-nums">${formatINR(tx.amount)}</td>
+          <td class="py-3 px-4 text-right">${renderStatusBadge(tx.status)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function downloadCSVFile(filename, csvContent) {
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function exportClientsCSV() {
+      const headers = ['Client ID', 'Client Name', 'Chain Status', 'Password', 'Return Base (INR)', 'Available Balance (INR)', 'Total Investment (INR)', 'Pending Amount (INR)', 'Shares Owned', 'Next Shares Allocation'];
+      const rows = appState.clients.map(c => [
+        c.id,
+        `"${c.name}"`,
+        c.chainStatus,
+        c.pass,
+        c.returnBase || 25000000,
+        c.balance,
+        c.invested,
+        c.pending,
+        c.shares,
+        `"${c.nextAllocation}"`
+      ]);
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      downloadCSVFile(`WealthCore_14_Clients_Chain_Report_${new Date().toISOString().slice(0,10)}.csv`, csv);
+      showToast('Exported 14 Clients Chain & Balance Report to CSV.', 'success');
+    }
+
+    function exportTransactionsCSV() {
+      const headers = ['Tx ID', 'Client ID', 'Client Name', 'Timestamp', 'Type', 'UTR / Details', 'Amount (INR)', 'Status'];
+      const rows = appState.transactions.map(t => [
+        t.txId,
+        t.clientId,
+        `"${t.clientName}"`,
+        `"${t.timestamp}"`,
+        t.type,
+        `"${t.reference}"`,
+        t.amount,
+        t.status
+      ]);
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      downloadCSVFile(`WealthCore_Master_Ledger_${new Date().toISOString().slice(0,10)}.csv`, csv);
+      showToast('Exported Master Transaction Ledger to CSV.', 'success');
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-emerald-950/95 border-emerald-600 text-emerald-200',
+        error: 'bg-rose-950/95 border-rose-600 text-rose-200',
+        info: 'bg-slate-900/95 border-slate-700 text-slate-200'
+      };
+      const icons = {
+        success: 'fa-circle-check text-emerald-400',
+        error: 'fa-triangle-exclamation text-rose-400',
+        info: 'fa-circle-info text-sky-400'
+      };
+
+      toast.className = `pointer-events-auto border rounded-xl px-4 py-3 shadow-2xl text-xs flex items-center gap-2.5 transition-all duration-300 ${colors[type] || colors.info}`;
+      toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(8px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3400);
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
